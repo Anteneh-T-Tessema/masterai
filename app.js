@@ -4,28 +4,57 @@
 
 const App = {
     state: {
+        id: window.COURSE_ID || 'llm_basics',
+        title: window.COURSE_TITLE || 'AI Specialization',
         chapters: window.CHAPTERS_DATA || [],
         glossary: window.GLOSSARY_DATA || [],
         scenarios: window.PLAYGROUND_SCENARIOS || {},
         currentView: 'dashboard',
         currentChapter: -1,
         currentUnit: -1,
-        completedUnits: JSON.parse(localStorage.getItem('llm_basics_completed')) || [],
-        bookmarks: JSON.parse(localStorage.getItem('llm_basics_bookmarks')) || [],
-        notes: JSON.parse(localStorage.getItem('llm_basics_notes')) || {},
-        unitScores: JSON.parse(localStorage.getItem('llm_basics_scores')) || {}, 
+        completedUnits: [],
+        bookmarks: [],
+        notes: {},
+        unitScores: {}, 
         selectedAnswers: {}, 
         searchQuery: '',
-        theme: localStorage.getItem('llm_basics_theme') || 'light'
+        theme: 'light'
     },
 
     init() {
+        // Load data specific to this course
+        this.state.completedUnits = JSON.parse(localStorage.getItem(`${this.state.id}_completed`)) || [];
+        this.state.bookmarks = JSON.parse(localStorage.getItem(`${this.state.id}_bookmarks`)) || [];
+        this.state.notes = JSON.parse(localStorage.getItem(`${this.state.id}_notes`)) || {};
+        this.state.unitScores = JSON.parse(localStorage.getItem(`${this.state.id}_scores`)) || {};
+        this.state.theme = localStorage.getItem(`${this.state.id}_theme`) || 'dark';
+
         this.cacheDOM();
         this.bindEvents();
         this.applyTheme();
+        
+        // Centralized Branding Map
+        const icons = {
+            llm: 'L', nlp: 'N', agents: '🤖', claude: 'C', gemini: 'G', codex: '💻',
+            safety: '🛡️', vision: '👁️', mlops: '🏗️', robotics: '🦾', 
+            finance: '🏦', healthcare: '🏥', creative: '🎨', law: '⚖️',
+            governance: '📋', audit: '🔍', security: '⚔️'
+        };
+
+        // Update Global Branding
+        if (this.els.sidebar) {
+            const logoIcon = this.els.sidebar.querySelector('.logo-icon');
+            const logoText = this.els.sidebar.querySelector('h1');
+            if (logoIcon) logoIcon.textContent = icons[this.state.id] || 'A';
+            if (logoText) logoText.textContent = this.state.title.split(' ')[0] + ' ' + (this.state.title.split(' ')[1] || '');
+        }
+
         this.renderSidebar();
         
-        const saved = JSON.parse(localStorage.getItem('llm_basics_current'));
+        if (this.els.breadcrumb) this.els.breadcrumb.textContent = `${this.state.title} Dashboard`;
+        document.title = `${this.state.title} | Global Academy`;
+        
+        const saved = JSON.parse(localStorage.getItem(`${this.state.id}_current`));
         if (saved && saved.chapter !== -1 && saved.view === 'unit') {
             this.loadUnit(saved.chapter, saved.unit);
         } else if (saved && saved.view === 'playground') {
@@ -456,7 +485,7 @@ const App = {
         const percentage = Math.round((correct / total) * 100);
         const unitId = `${this.state.currentChapter}-${this.state.currentUnit}`;
         this.state.unitScores[unitId] = percentage;
-        localStorage.setItem('llm_basics_scores', JSON.stringify(this.state.unitScores));
+        localStorage.setItem(`${this.state.id}_scores`, JSON.stringify(this.state.unitScores));
         if (percentage >= 80) this.markCompleted(this.state.currentChapter, this.state.currentUnit);
         this.loadUnit(this.state.currentChapter, this.state.currentUnit);
     },
@@ -473,7 +502,7 @@ const App = {
     resetQuiz() {
         const id = `${this.state.currentChapter}-${this.state.currentUnit}`;
         delete this.state.unitScores[id];
-        localStorage.setItem('llm_basics_scores', JSON.stringify(this.state.unitScores));
+        localStorage.setItem(`${this.state.id}_scores`, JSON.stringify(this.state.unitScores));
         this.loadUnit(this.state.currentChapter, this.state.currentUnit);
     },
 
@@ -481,14 +510,18 @@ const App = {
         const id = `${c}-${u}`;
         if (!this.state.completedUnits.includes(id)) {
             this.state.completedUnits.push(id);
-            localStorage.setItem('llm_basics_completed', JSON.stringify(this.state.completedUnits));
+            localStorage.setItem(`${this.state.id}_completed`, JSON.stringify(this.state.completedUnits));
             this.renderSidebar();
             this.updateProgressUI();
             
             // Trigger Certificate ONLY if Final Exam (Module 11) is passed
-            if (c === 10) { // Module 11 is 0-indexed index 10
+            if (c === this.state.chapters.length - 1) { 
                 const score = this.state.unitScores[id];
-                if (score >= 80) this.els.modal.style.display = 'flex';
+                if (score >= 80) {
+                    this.els.modal.querySelector('h2').textContent = `${this.state.title} Mastered!`;
+                    this.els.modal.querySelector('p').textContent = `You have successfully completed all ${this.getTotalUnits()} modules with distinction.`;
+                    this.els.modal.style.display = 'flex';
+                }
             }
         }
     },
@@ -522,8 +555,8 @@ const App = {
     },
     updateNavButtons() { const isFirst = this.state.currentChapter === 0 && this.state.currentUnit === 0; this.els.prevBtn.textContent = isFirst ? '← Dashboard' : '← Back'; },
     getTotalUnits() { return this.state.chapters.reduce((acc, c) => acc + c.units.length, 0); },
-    saveState() { localStorage.setItem('llm_basics_current', JSON.stringify({ view: this.state.currentView, chapter: this.state.currentChapter, unit: this.state.currentUnit })); },
-    toggleTheme() { this.state.theme = document.documentElement.classList.toggle('dark-mode') ? 'dark' : 'light'; localStorage.setItem('llm_basics_theme', this.state.theme); },
+    saveState() { localStorage.setItem(`${this.state.id}_current`, JSON.stringify({ view: this.state.currentView, chapter: this.state.currentChapter, unit: this.state.currentUnit })); },
+    toggleTheme() { this.state.theme = document.documentElement.classList.toggle('dark-mode') ? 'dark' : 'light'; localStorage.setItem(`${this.state.id}_theme`, this.state.theme); },
     applyTheme() { if (this.state.theme === 'dark') document.documentElement.classList.add('dark-mode'); }
 };
 
