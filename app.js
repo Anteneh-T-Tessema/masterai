@@ -38,7 +38,7 @@ const App = {
             llm: 'L', nlp: 'N', agents: '🤖', claude: 'C', gemini: 'G', codex: '💻',
             safety: '🛡️', vision: '👁️', mlops: '🏗️', robotics: '🦾', 
             finance: '🏦', healthcare: '🏥', creative: '🎨', law: '⚖️',
-            governance: '📋', audit: '🔍', security: '⚔️'
+            governance: '📋', audit: '🔍', security: '⚔️', energy: '⚡', defense: '🛰️'
         };
 
         // Update Global Branding
