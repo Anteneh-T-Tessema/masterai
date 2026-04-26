@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Academy | The Future of Intelligence</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --midnight: #0a0c10;
+            --accent-glow: rgba(88, 166, 255, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --text-bright: #ffffff;
+            --text-dim: #8b949e;
+        }
+
+        body {
+            background-color: var(--midnight);
+            color: var(--text-bright);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        /* Animated Background */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 45, 98, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(88, 166, 255, 0.1) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav.main-nav {
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .nav-logo { display: flex; align-items: center; gap: 12px; font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.5rem; }
+        .nav-logo span { background: var(--accent-color); color: white; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 2rem 6rem;
+            text-align: center;
+            position: relative;
+        }
+        .hero-label {
+            display: inline-block;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+        }
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            background: linear-gradient(to bottom, #ffffff 30%, #8b949e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.4rem;
+            color: var(--text-dim);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        /* Course Sections */
+        .catalog-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem 10rem;
+        }
+
+        .track-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .track-title::after { content: ''; flex: 1; height: 1px; background: var(--glass-border); }
+
+        .grid-excellence {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            margin-bottom: 8rem;
+        }
+
+        /* Glass Card Redesign */
+        .premium-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 32px;
+            padding: 3rem;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            text-decoration: none;
+            color: inherit;
+            overflow: hidden;
+        }
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top left, var(--accent-glow), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .premium-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--accent-color);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+        }
+        .premium-card:hover::before { opacity: 1; }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 20px var(--accent-glow));
+        }
+        .card-badge {
+            position: absolute;
+            top: 3rem; right: 3rem;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 4px 12px;
+            border-radius: 50px;
+        }
+        .premium-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .premium-card p {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+        .card-action {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+        }
+        .card-action svg { transition: transform 0.3s ease; }
+        .premium-card:hover .card-action svg { transform: translateX(8px); }
+
+        /* Primary CTA Button */
+        .cta-primary {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 1.25rem 3.5rem;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 0 40px rgba(88, 166, 255, 0.3);
+            letter-spacing: 0.05em;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(88, 166, 255, 0.5);
+            background: #ffffff;
+            color: var(--midnight);
+        }
+        .cta-primary::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .cta-primary:hover::after { opacity: 1; }
+
+        /* Status Bar */
+        .status-bar {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-around;
+            max-width: 1000px;
+            margin: 0 auto 8rem;
+            backdrop-filter: blur(10px);
+        }
+        .stat-item { text-align: center; }
+        .stat-item .val { font-size: 2rem; font-weight: 900; font-family: 'Outfit', sans-serif; display: block; }
+        .stat-item .lbl { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 3rem; }
+            .grid-excellence { grid-template-columns: 1fr; }
+            .premium-card { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+
+    <nav class="main-nav">
+        <div class="nav-logo">
+            <span>A</span> AI ACADEMY
+        </div>
+        <div style="display: flex; gap: 2rem; font-weight: 600; font-size: 0.9rem; color: var(--text-dim)">
+            <a href="#" style="color: var(--text-bright); text-decoration: none">CATALOG</a>
+            <a href="#" style="text-decoration: none; color: inherit">LABS</a>
+            <a href="#" style="text-decoration: none; color: inherit">CERTIFICATIONS</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-label">The Future of AI Education is Here</div>
+        <h1>Master Frontier Intelligence</h1>
+        <p>A professional ecosystem for engineers, researchers, and creators. Build the next generation of autonomous systems with the world's most rigorous specializations.</p>
+        
+        <div style="margin-bottom: 5rem;">
+            <a href="#catalog-start" class="cta-primary">
+                START FREE TODAY
+                <span style="font-size: 0.8rem; display: block; font-weight: 400; opacity: 0.8; margin-top: 4px;">Master AI Specializations</span>
+            </a>
+        </div>
+
+        <div class="status-bar">
+            <div class="stat-item">
+                <span class="val">10+</span>
+                <span class="lbl">Expert Tracks</span>
+            </div>
+            <div class="stat-item">
+                <span class="val">80%</span>
+                <span class="lbl">Mastery Standard</span>
+            </div>
+            <div class="stat-item">
+                <span class="val">24/7</span>
+                <span class="lbl">Lab Access</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="catalog-content" id="catalog-start">
+        <!-- Track: Core Intelligence -->
+        <div class="track-title">Foundation & Mastery</div>
+        <div class="grid-excellence">
+            <a href="llm_basics.html" class="premium-card">
+                <div class="card-badge">ADVANCED</div>
+                <div class="card-icon">🧠</div>
+                <h3>LLM Basics: Golden Standard</h3>
+                <p>The ultimate specialization in Large Language Models. Transformers, RAG, PEFT, and RLHF aligned with industry rigor.</p>
+                <div class="card-action">
+                    BEGIN SPECIALIZATION
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </div>
+            </a>
+
+            <a href="nlp_specialization.html" class="premium-card">
+                <div class="card-badge">FOUNDATIONAL</div>
+                <div class="card-icon">💬</div>
+                <h3>NLP Specialist Program</h3>
+                <p>Master the architectural foundations of language modeling. From Word Embeddings to sequential deep learning.</p>
+                <div class="card-action">
+                    START LEARNING
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </div>
+            </a>
+        </div>
+
+        <!-- Track: Agentic Systems -->
+        <div class="track-title">Agency & Developer Tools</div>
+        <div class="grid-excellence">
+            <a href="course_agents.html" class="premium-card">
+                <div class="card-badge">PREMIUM</div>
+                <div class="card-icon">🤖</div>
+                <h3>AI Agents & MCP</h3>
+                <p>Transition from chatbots to agents. Master Model Context Protocol and autonomous multi-agent orchestration.</p>
+                <div class="card-action">
+                    EXPLORE AGENCY
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </div>
+            </a>
+
+            <a href="course_claude.html" class="premium-card">
+                <div class="card-badge">NEW</div>
+                <div class="card-icon">💻</div>
+                <h3>Claude Code & Specialist</h3>
+                <p>Leveraging Anthropic's developer ecosystem to build production-grade artifacts and high-fidelity apps.</p>
+                <div class="card-action">
+                    MASTER CLAUDE
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </div>
+            </a>
+        </div>
+
+        <!-- Track: The Model Frontier -->
+        <div class="track-title">Frontier Model Mastery</div>
+        <div class="grid-excellence" style="grid-template-columns: 1fr;">
+            <a href="course_gemini.html" class="premium-card" style="display: flex; align-items: center; gap: 4rem;">
+                <div class="card-badge">ENTERPRISE</div>
+                <div class="card-icon" style="font-size: 6rem; margin: 0">✨</div>
+                <div style="flex: 1">
+                    <h3>Gemini & Google AI Specialization</h3>
+                    <p>Unlock the power of long-context reasoning with Gemini 1.5 Pro and Google's multi-modal architecture.</p>
+                    <div class="card-action">
+                        MASTER GEMINI
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <footer style="text-align: center; padding: 10rem 2rem; border-top: 1px solid var(--glass-border); color: var(--text-dim); font-size: 0.9rem">
+        <div class="nav-logo" style="justify-content: center; margin-bottom: 2rem">
+            <span>A</span> AI ACADEMY
+        </div>
+        <p>&copy; 2026 Global AI Academy Specializations. Build what's next.</p>
+    </footer>
+</body>
+</html>

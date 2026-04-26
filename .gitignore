@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+.tempmediaStorage/
+*.png
+*.jpg
+*.jpeg
+*.gif
+!**/assets/*.png
+!**/assets/*.jpg
+!**/assets/*.jpeg
+!**/assets/*.gif
