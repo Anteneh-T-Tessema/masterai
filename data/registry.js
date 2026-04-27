@@ -38,5 +38,15 @@ window.ACADEMY_REGISTRY = {
     "biotech": { "title": "AI for Biotech & Drug Discovery", "icon": "🧬", "file": "data/biotech_basics.js" },
     "space": { "title": "AI for Aerospace & Space", "icon": "🚀", "file": "data/space_basics.js" },
     "psych": { "title": "AI for Psychology & Health", "icon": "🧠", "file": "data/psych_basics.js" },
-    "music": { "title": "AI for Music & Sonic Arts", "icon": "🎵", "file": "data/music_basics.js" }
+    "music": { "title": "AI for Music & Sonic Arts", "icon": "🎵", "file": "data/music_basics.js" },
+    "ethics": { "title": "AI Ethics & Philosophy", "icon": "⚖️", "file": "data/ethics_basics.js" },
+    "linguistics": { "title": "AI for Linguistics", "icon": "🗣️", "file": "data/linguistics_basics.js" },
+    "oceaneng": { "title": "AI for Ocean Engineering", "icon": "🚢", "file": "data/oceaneng_basics.js" },
+    "urbanagri": { "title": "AI for Urban Agriculture", "icon": "🏙️", "file": "data/urbanagri_basics.js" },
+    "physics": { "title": "AI for High-Energy Physics", "icon": "⚛️", "file": "data/physics_basics.js" },
+    "astronomy": { "title": "AI for Astronomy", "icon": "🔭", "file": "data/astronomy_basics.js" },
+    "vet": { "title": "AI for Veterinary Science", "icon": "🐾", "file": "data/vet_basics.js" },
+    "sports": { "title": "AI for Sports Science", "icon": "🏅", "file": "data/sports_basics.js" },
+    "fashion": { "title": "AI for Fashion & Design", "icon": "👗", "file": "data/fashion_basics.js" },
+    "impact": { "title": "AI for Philanthropy & Impact", "icon": "🤝", "file": "data/impact_basics.js" }
 };
