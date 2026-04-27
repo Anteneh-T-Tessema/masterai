@@ -33,5 +33,10 @@ window.ACADEMY_REGISTRY = {
     "marine": { "title": "AI for Marine & Oceans", "icon": "🌊", "file": "data/marine_basics.js" },
     "tourism": { "title": "AI for Hospitality & Tourism", "icon": "🏨", "file": "data/tourism_basics.js" },
     "safety_spec": { "title": "AI for Public Safety & Emergency", "icon": "🚨", "file": "data/safety_specialist.js" },
-    "materials": { "title": "AI for Materials Science", "icon": "🧪", "file": "data/materials_basics.js" }
+    "materials": { "title": "AI for Materials Science", "icon": "🧪", "file": "data/materials_basics.js" },
+    "quantum": { "title": "AI for Quantum Computing", "icon": "⚛️", "file": "data/quantum_basics.js" },
+    "biotech": { "title": "AI for Biotech & Drug Discovery", "icon": "🧬", "file": "data/biotech_basics.js" },
+    "space": { "title": "AI for Aerospace & Space", "icon": "🚀", "file": "data/space_basics.js" },
+    "psych": { "title": "AI for Psychology & Health", "icon": "🧠", "file": "data/psych_basics.js" },
+    "music": { "title": "AI for Music & Sonic Arts", "icon": "🎵", "file": "data/music_basics.js" }
 };

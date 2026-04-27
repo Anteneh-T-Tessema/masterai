@@ -276,23 +276,67 @@
             </a>
         </div>
 
-        <div class="status-bar">
+        <div class="status-bar animate-slide-up">
         <div class="status-item">
-            <span class="status-value">23</span>
+            <span class="status-value" id="total-tracks-count">40</span>
             <span class="status-label">Tracks</span>
+        </div>
+        <div class="status-item">
+            <span class="status-value" id="academy-mastery">0%</span>
+            <span class="status-label">Global Mastery</span>
         </div>
         <div class="status-item">
             <span class="status-value" id="global-streak">1</span>
             <span class="status-label">Day Streak</span>
         </div>
         <div class="status-item">
-            <span class="status-value">12.4k</span>
-            <span class="status-label">Graduates</span>
+            <span class="status-value" id="certs-earned">0</span>
+            <span class="status-label">Certificates</span>
         </div>
-        <div class="status-item">
-            <span class="status-value">4.9/5</span>
-            <span class="status-label">Rating</span>
-        </div>
+    </div>
+
+    <!-- Frontier Sciences & Arts -->
+    <div class="track-title">Frontier Sciences & Arts</div>
+    <div class="grid-excellence">
+        <a href="course.html?id=quantum" class="premium-card card-large">
+            <div class="card-badge">COMPUTING</div>
+            <div class="card-icon">⚛️</div>
+            <h3>AI for Quantum Computing</h3>
+            <p>Master the intersection of intelligence and the quantum realm. Noise mitigation and circuit optimization.</p>
+            <div class="card-action">STUDY QUANTUM</div>
+        </a>
+
+        <a href="course.html?id=biotech" class="premium-card card-medium">
+            <div class="card-badge">BIOLOGY</div>
+            <div class="card-icon">🧬</div>
+            <h3>AI for Biotech & Drug Discovery</h3>
+            <p>Master protein folding and de novo drug design.</p>
+            <div class="card-action">STUDY BIOTECH</div>
+        </a>
+
+        <a href="course.html?id=space" class="premium-card card-small">
+            <div class="card-badge">COSMIC</div>
+            <div class="card-icon">🚀</div>
+            <h3>AI for Aerospace & Space</h3>
+            <p>Autonomous rovers and swarm orchestration.</p>
+            <div class="card-action">STUDY SPACE</div>
+        </a>
+
+        <a href="course.html?id=psych" class="premium-card card-small">
+            <div class="card-badge">WELLNESS</div>
+            <div class="card-icon">🧠</div>
+            <h3>AI for Psychology & Health</h3>
+            <p>Digital therapeutics and risk detection.</p>
+            <div class="card-action">STUDY PSYCH</div>
+        </a>
+
+        <a href="course.html?id=music" class="premium-card card-wide">
+            <div class="card-badge">SONIC</div>
+            <div class="card-icon">🎵</div>
+            <h3>AI for Music & Sonic Arts</h3>
+            <p>Generative composition and neural audio synthesis.</p>
+            <div class="card-action">STUDY MUSIC</div>
+        </a>
     </div>
     </header>
 
@@ -730,5 +774,34 @@
         </div>
         <p>&copy; 2026 Global AI Academy Specializations. Build what's next.</p>
     </footer>
+    <script src="data/registry.js"></script>
+    <script>
+        function updateGlobalDashboard() {
+            const registry = window.ACADEMY_REGISTRY;
+            const ids = Object.keys(registry);
+            let totalUnits = 0;
+            let completedUnits = 0;
+            let certs = 0;
+
+            ids.forEach(id => {
+                const completed = JSON.parse(localStorage.getItem(`${id}_completed`)) || [];
+                // Assume 4 units per track for simplicity in global calculation
+                totalUnits += 4;
+                completedUnits += completed.length;
+                if (completed.length >= 4) certs++;
+            });
+
+            const mastery = Math.round((completedUnits / totalUnits) * 100) || 0;
+            
+            document.getElementById('academy-mastery').textContent = `${mastery}%`;
+            document.getElementById('certs-earned').textContent = certs;
+            document.getElementById('total-tracks-count').textContent = ids.length;
+            
+            const streak = localStorage.getItem('global_streak') || 1;
+            document.getElementById('global-streak').textContent = streak;
+        }
+
+        window.addEventListener('DOMContentLoaded', updateGlobalDashboard);
+    </script>
 </body>
 </html>
