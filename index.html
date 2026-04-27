@@ -286,13 +286,20 @@
             <span class="status-label">Global Mastery</span>
         </div>
         <div class="status-item">
-            <span class="status-value" id="global-streak">1</span>
-            <span class="status-label">Day Streak</span>
+            <header class="academy-hero">
+        <h1>Global AI Academy</h1>
+        <p class="hero-subtitle">The definitive 50-track specialization ecosystem for the 21st Century.</p>
+        
+        <div class="cta-group">
+            <a href="#catalog-start" class="cta-primary">Explore Specializations</a>
+            <a href="#news-start" class="cta-secondary">Latest Frontier News</a>
         </div>
-        <div class="status-item">
-            <span class="status-value" id="certs-earned">0</span>
-            <span class="status-label">Certificates</span>
-        </div>
+    </header>
+
+    <!-- Frontier News Section -->
+    <div id="news-start" class="track-title" style="margin-top: 4rem">Daily Frontier Intelligence</div>
+    <div class="grid-excellence" id="news-grid">
+        <!-- Dynamic News Injection -->
     </div>
 
         <!-- Track: Specialized Research -->
@@ -863,7 +870,27 @@
         <p>&copy; 2026 Global AI Academy Specializations. Build what's next.</p>
     </footer>
     <script src="data/registry.js"></script>
+    <script src="data/news.js"></script>
     <script>
+        function renderNews() {
+            const newsGrid = document.getElementById('news-grid');
+            if (!newsGrid) return;
+            
+            const news = window.ACADEMY_NEWS.slice(0, 3); // Top 3 news
+            newsGrid.innerHTML = news.map((item, idx) => `
+                <div class="premium-card ${idx === 0 ? 'card-large' : 'card-medium'} animate-slide-up" style="animation-delay: ${idx * 0.1}s">
+                    <div class="card-badge">${item.category}</div>
+                    <div style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 0.5rem">${item.date}</div>
+                    <h3>${item.title}</h3>
+                    <p>${item.summary || item.content}</p>
+                    <div class="card-action">
+                        READ INSIGHT
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         function updateGlobalDashboard() {
             const registry = window.ACADEMY_REGISTRY;
             const ids = Object.keys(registry);
@@ -873,20 +900,21 @@
 
             ids.forEach(id => {
                 const completed = JSON.parse(localStorage.getItem(`${id}_completed`)) || [];
-                // Assume 4 units per track for simplicity in global calculation
-                totalUnits += 4;
+                totalUnits += 4; // Assume 4 units avg
                 completedUnits += completed.length;
                 if (completed.length >= 4) certs++;
             });
 
             const mastery = Math.round((completedUnits / totalUnits) * 100) || 0;
             
-            document.getElementById('academy-mastery').textContent = `${mastery}%`;
-            document.getElementById('certs-earned').textContent = certs;
-            document.getElementById('total-tracks-count').textContent = ids.length;
+            if(document.getElementById('academy-mastery')) document.getElementById('academy-mastery').textContent = `${mastery}%`;
+            if(document.getElementById('certs-earned')) document.getElementById('certs-earned').textContent = certs;
+            if(document.getElementById('total-tracks-count')) document.getElementById('total-tracks-count').textContent = ids.length;
             
             const streak = localStorage.getItem('global_streak') || 1;
-            document.getElementById('global-streak').textContent = streak;
+            if(document.getElementById('global-streak')) document.getElementById('global-streak').textContent = streak;
+            
+            renderNews();
         }
 
         window.addEventListener('DOMContentLoaded', updateGlobalDashboard);
