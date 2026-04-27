@@ -461,10 +461,15 @@ const App = {
         const video = contributor ? contributor.videos[0] : null;
 
         const videoHtml = video ? `
-            <div class="video-cinematic-container" style="margin-bottom: 3rem; background: #000; border-radius: 24px; overflow: hidden; border: 1px solid var(--glass-border); box-shadow: 0 30px 60px rgba(0,0,0,0.5);">
+            <div class="video-cinematic-container" style="position: relative; margin-bottom: 3rem; background: #000; border-radius: 24px; overflow: hidden; border: 1px solid var(--glass-border); box-shadow: 0 30px 60px rgba(0,0,0,0.5);">
+                <!-- Institutional Seal Overlay -->
+                <div style="position: absolute; top: 20px; right: 20px; z-index: 10; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); border: 1px solid var(--accent-color); padding: 5px 12px; border-radius: 5px; color: var(--accent-color); font-size: 0.6rem; font-weight: 900; letter-spacing: 0.1em; pointer-events: none;">
+                    OFFICIAL ACADEMY CERTIFIED
+                </div>
+                
                 <div class="video-ratio" style="position: relative; padding-bottom: 56.25%; height: 0;">
                     <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
-                        src="https://www.youtube.com/embed/${video.youtube_id}?modestbranding=1&rel=0" 
+                        src="https://www.youtube.com/embed/${video.youtube_id}?modestbranding=1&rel=0&iv_load_policy=3" 
                         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                     </iframe>
                 </div>
@@ -472,12 +477,26 @@ const App = {
                     <div style="display: flex; align-items: center; gap: 1rem;">
                         <span style="font-size: 1.5rem">${contributor.avatar}</span>
                         <div>
-                            <div style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em;">Featured Contributor</div>
+                            <div style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em;">Institutional Expert</div>
                             <div style="font-weight: 700;">${contributor.name}</div>
                         </div>
                     </div>
-                    <div style="font-size: 0.8rem; color: var(--accent-color); font-weight: 800;">${video.title}</div>
+                    <div style="text-align: right">
+                        <div style="font-size: 0.7rem; color: var(--text-dim);">CURRICULUM MODULE</div>
+                        <div style="font-size: 0.8rem; color: var(--accent-color); font-weight: 800;">${video.title}</div>
+                    </div>
                 </div>
+            </div>
+
+            <!-- Standardized Learning Objectives -->
+            <div class="learning-objectives" style="background: rgba(88, 166, 255, 0.05); border-left: 4px solid var(--accent-color); padding: 1.5rem; border-radius: 12px; margin-bottom: 3rem;">
+                <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-color); margin-bottom: 1rem;">Module Learning Objectives</h4>
+                <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.9rem; line-height: 1.6; color: var(--text-dim);">
+                    <li>Analyze specialized architectural patterns in ${this.state.title}.</li>
+                    <li>Execute industrial-grade research simulations using the Academy R&D Labs.</li>
+                    <li>Validate mastery through official Graded Assessments.</li>
+                    <li>Qualify for Institutional Certification upon 100% completion.</li>
+                </ul>
             </div>
         ` : '';
         
