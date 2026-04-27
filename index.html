@@ -309,36 +309,6 @@
         .employee-row .name { font-weight: 700; color: white; }
         .employee-row .progress-pill { color: var(--success-color); font-weight: 800; }
 
-        /* Enterprise Styling */
-        .view-toggle { display: flex; gap: 1rem; margin-bottom: 2rem; justify-content: center; }
-        .toggle-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border-color);
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            color: var(--text-dim);
-            cursor: pointer;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-        .toggle-btn.active {
-            background: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-        }
-
-        .enterprise-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 20px; }
-        .stat-card .label { color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
-        .stat-card h3 { margin: 0.5rem 0 0; font-size: 2rem; color: white; }
-
-        .enterprise-table-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 1rem; margin-bottom: 2rem; }
-        .table-header, .employee-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; padding: 1rem; align-items: center; }
-        .table-header { color: var(--text-dim); font-size: 0.8rem; font-weight: 800; border-bottom: 1px solid var(--border-color); }
-        .employee-row { border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .employee-row .name { font-weight: 700; color: white; }
-        .employee-row .progress-pill { color: var(--success-color); font-weight: 800; }
 
         /* Licensing Styling */
         .enterprise-licensing { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 2rem; }
@@ -360,56 +330,41 @@
         .tier h4 { margin: 0; color: white; }
         .tier p { margin: 0.25rem 0 0; font-size: 0.8rem; color: var(--text-dim); }
 
-        /* Badge Wall Styling */
-        .badge-wall {
+        /* Lab Styling */
+        .lab-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: 250px 1fr;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 24px;
-            padding: 2rem;
+            overflow: hidden;
+            height: 600px;
             margin-bottom: 4rem;
         }
 
-        .mastery-badge {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            text-align: center;
-            opacity: 0.2;
-            filter: grayscale(1);
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        .lab-sidebar { background: rgba(0,0,0,0.2); border-right: 1px solid var(--border-color); padding: 1.5rem; }
+        .lab-sidebar h3 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 1.5rem; }
+        
+        .lab-item {
+            width: 100%; text-align: left; background: none; border: none; color: var(--text-dim);
+            padding: 0.75rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;
+            font-weight: 600; margin-bottom: 0.5rem;
         }
+        .lab-item.active, .lab-item:hover { background: rgba(99, 102, 241, 0.1); color: white; }
 
-        .mastery-badge.unlocked {
-            opacity: 1;
-            filter: grayscale(0);
-            transform: translateY(-5px);
+        .lab-main { display: flex; flex-direction: column; padding: 1.5rem; background: #0a0a1a; }
+        .lab-header h4 { margin: 0; font-size: 1.5rem; }
+        .lab-header p { color: var(--text-dim); margin: 0.5rem 0 1.5rem; font-size: 0.9rem; }
+
+        .code-editor-container { flex-grow: 1; display: flex; flex-direction: column; background: #000; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; margin-bottom: 1rem; }
+        .editor-header { background: #1a1a1a; padding: 0.5rem 1rem; font-size: 0.7rem; font-family: 'Fira Code', monospace; color: var(--text-dim); border-bottom: 1px solid var(--border-color); }
+        #lab-code { flex-grow: 1; background: none; border: none; color: #a5b4fc; padding: 1rem; font-family: 'Fira Code', monospace; resize: none; outline: none; line-height: 1.5; }
+
+        .terminal-output {
+            background: #000; border: 1px solid var(--border-color); border-radius: 8px;
+            padding: 1rem; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #10b981;
+            height: 120px; overflow-y: auto; white-space: pre-wrap;
         }
-
-        .badge-circle {
-            width: 70px;
-            height: 70px;
-            background: rgba(255,255,255,0.05);
-            border: 2px solid var(--border-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            position: relative;
-        }
-
-        .mastery-badge.unlocked .badge-circle {
-            border-color: var(--accent-color);
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.2), transparent);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-        }
-
-        .badge-label { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
-        .mastery-badge.unlocked .badge-label { color: white; }
 
         /* Status Bar */
         .status-bar {
@@ -460,15 +415,6 @@
             </a>
         </div>
 
-        <header class="academy-hero">
-        <h1>Global AI Academy</h1>
-        <p class="hero-subtitle">The definitive 50-track specialization ecosystem for the 21st Century.</p>
-        
-        <div class="cta-group">
-            <a href="#catalog-start" class="cta-primary">Explore Specializations</a>
-            <a href="#news-start" class="cta-secondary">Latest Frontier News</a>
-        </div>
-    </header>
 
     <div class="view-toggle animate-slide-up">
         <button class="toggle-btn active" id="view-personal" onclick="switchView('personal')">Individual Dashboard</button>
@@ -534,79 +480,6 @@
         </div>
     </div>
 
-    <!-- Enterprise Command Center (New) -->
-    <div id="enterprise-dashboard" style="display: none;">
-        <div class="enterprise-stats animate-slide-up">
-            <div class="stat-card">
-                <span class="label">Organization</span>
-                <h3 id="ent-org-name">Loading...</h3>
-            </div>
-            <div class="stat-card">
-                <span class="label">Team Mastery</span>
-                <h3 id="ent-team-mastery">0%</h3>
-            </div>
-            <div class="stat-card">
-                <span class="label">Licenses Active</span>
-                <h3 id="ent-licenses">0/0</h3>
-            </div>
-        </div>
-
-        <div class="enterprise-table-container animate-slide-up">
-            <div class="table-header">
-                <span>Employee</span>
-                <span>Role</span>
-                <span>Progress</span>
-                <span>Certifications</span>
-                <span>Action</span>
-            </div>
-            <div id="employee-list">
-                <!-- Dynamic Employee Injection -->
-            </div>
-        </div>
-
-        <!-- Seat Management & Licensing -->
-        <div class="enterprise-licensing animate-slide-up">
-            <div class="licensing-header">
-                <h3>Seat Management & Bulk Licensing</h3>
-                <p>Scale your team's intelligence with tiered corporate pricing.</p>
-            </div>
-            
-            <div class="licensing-grid">
-                <div class="pricing-calculator">
-                    <label>Number of Seats</label>
-                    <div class="seat-input-group">
-                        <input type="number" id="seat-count" value="10" min="1" oninput="calculateEnterprisePrice()">
-                        <span class="seat-label">Seats</span>
-                    </div>
-                    <div class="price-breakdown">
-                        <div class="price-row">
-                            <span>Price per Seat:</span>
-                            <span id="price-per-seat">$49.00</span>
-                        </div>
-                        <div class="price-row total">
-                            <span>Total Annual:</span>
-                            <span id="enterprise-total">$490.00</span>
-                        </div>
-                    </div>
-                    <button class="nav-btn primary" style="width: 100%; margin-top: 1.5rem" onclick="checkoutEnterprise()">Initialize Corporate Checkout</button>
-                </div>
-
-                <div class="tier-info">
-                    <div class="tier active" id="tier-1">
-                        <h4>Starter (1-10)</h4>
-                        <p>$49 / seat / year</p>
-                    </div>
-                    <div class="tier" id="tier-2">
-                        <h4>Growth (11-50)</h4>
-                        <p>$39 / seat / year</p>
-                    </div>
-                    <div class="tier" id="tier-3">
-                        <h4>Scale (51+)</h4>
-                        <p>$29 / seat / year</p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     <!-- Global Learning Challenge -->
     <div id="challenge-section" class="challenge-card animate-slide-up" style="display: none;">
@@ -1334,32 +1207,32 @@
             }
         }
 
+    <script src="data/registry.js"></script>
+    <script src="data/news.js"></script>
+    <script src="data/leaderboard.js"></script>
+    <script src="data/jobs.js"></script>
+    <script src="data/badges.js"></script>
     <script src="data/enterprise.js"></script>
+    <script src="data/labs.js"></script>
     <script>
+        let currentLabId = 'finance';
+
         function switchView(view) {
             document.getElementById('personal-dashboard').style.display = view === 'personal' ? 'block' : 'none';
             document.getElementById('enterprise-dashboard').style.display = view === 'enterprise' ? 'block' : 'none';
-            
             document.getElementById('view-personal').classList.toggle('active', view === 'personal');
             document.getElementById('view-enterprise').classList.toggle('active', view === 'enterprise');
-            
             if (view === 'enterprise') renderEnterprise();
         }
 
         function calculateEnterprisePrice() {
             const count = parseInt(document.getElementById('seat-count').value) || 0;
-            let price = 49;
-            let tier = 1;
-
+            let price = 49, tier = 1;
             if (count > 50) { price = 29; tier = 3; }
             else if (count > 10) { price = 39; tier = 2; }
-
             document.getElementById('price-per-seat').textContent = `$${price}.00`;
             document.getElementById('enterprise-total').textContent = `$${(price * count).toLocaleString()}.00`;
-            
-            document.querySelectorAll('.tier').forEach((t, idx) => {
-                t.classList.toggle('active', idx + 1 === tier);
-            });
+            document.querySelectorAll('.tier').forEach((t, idx) => t.classList.toggle('active', idx + 1 === tier));
         }
 
         function checkoutEnterprise() {
@@ -1371,11 +1244,9 @@
         function renderEnterprise() {
             const data = window.ACADEMY_ENTERPRISE;
             if(!document.getElementById('ent-org-name')) return;
-            
             document.getElementById('ent-org-name').textContent = data.organization;
             document.getElementById('ent-team-mastery').textContent = data.team_mastery;
             document.getElementById('ent-licenses').textContent = `${data.licenses.active}/${data.licenses.total}`;
-
             const list = document.getElementById('employee-list');
             if(list) {
                 list.innerHTML = data.employees.map(emp => `
@@ -1424,12 +1295,6 @@
             }
         }
 
-        function applyToJob(trackId, title) {
-            const completed = JSON.parse(localStorage.getItem(`${trackId}_completed`)) || [];
-            if (completed.length < 4) alert(`Locked: Certification Required for ${title}`);
-            else alert(`Verified Application Sent for ${title}!`);
-        }
-
         function renderJobs() {
             const jobGrid = document.getElementById('job-board-grid');
             const search = document.getElementById('job-search')?.value.toLowerCase() || '';
@@ -1448,6 +1313,12 @@
             `).join('');
         }
 
+        function applyToJob(trackId, title) {
+            const completed = JSON.parse(localStorage.getItem(`${trackId}_completed`)) || [];
+            if (completed.length < 4) alert(`Locked: Certification Required for ${title}`);
+            else alert(`Verified Application Sent for ${title}!`);
+        }
+
         window.currentJobFilter = 'all';
         function setJobFilter(filter) {
             window.currentJobFilter = filter;
@@ -1462,7 +1333,6 @@
         }
 
         function shareChallengeProgress() {
-            const days = JSON.parse(localStorage.getItem('challenge_days')) || [];
             window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank');
         }
 
@@ -1477,9 +1347,6 @@
                 document.getElementById('challenge-fill').style.width = `${percent}%`;
                 document.getElementById('challenge-day-count').textContent = `Day ${days.length} of 30`;
                 document.getElementById('challenge-percent').textContent = `${percent}%`;
-                if (days.length >= 30) document.getElementById('challenge-badge').textContent = '👑';
-                else if (days.length >= 20) document.getElementById('challenge-badge').textContent = '🧠';
-                else if (days.length >= 10) document.getElementById('challenge-badge').textContent = '🚀';
             } else {
                 section.style.display = 'flex';
             }
@@ -1489,17 +1356,28 @@
             const wall = document.getElementById('badge-wall');
             if (!wall) return;
             const registry = window.ACADEMY_REGISTRY;
-            
             wall.innerHTML = Object.keys(registry).map(id => {
                 const completed = JSON.parse(localStorage.getItem(`${id}_completed`)) || [];
                 const isUnlocked = completed.length >= 4;
-                return `
-                    <div class="mastery-badge ${isUnlocked ? 'unlocked' : ''}" title="${registry[id].title}">
-                        <div class="badge-circle">${registry[id].icon}</div>
-                        <div class="badge-label">${id.substring(0, 8)}</div>
-                    </div>
-                `;
+                return `<div class="mastery-badge ${isUnlocked ? 'unlocked' : ''}" title="${registry[id].title}"><div class="badge-circle">${registry[id].icon}</div><div class="badge-label">${id.substring(0, 8)}</div></div>`;
             }).join('');
+        }
+
+        function loadLab(id) {
+            currentLabId = id;
+            const lab = window.ACADEMY_LABS[id];
+            document.getElementById('lab-title').textContent = lab.title;
+            document.getElementById('lab-mission').textContent = lab.mission;
+            document.getElementById('lab-code').value = lab.starter_code;
+            document.getElementById('lab-terminal').textContent = `> Switched to ${lab.title}. System Ready.`;
+            document.querySelectorAll('.lab-item').forEach(item => item.classList.toggle('active', item.getAttribute('onclick').includes(`'${id}'`)));
+        }
+
+        function runExperiment() {
+            const terminal = document.getElementById('lab-terminal');
+            const lab = window.ACADEMY_LABS[currentLabId];
+            terminal.textContent = `> Executing Experiment...\n> Initializing model parameters...\n> Processing dataset...\n\n${lab.output}`;
+            terminal.scrollTop = terminal.scrollHeight;
         }
 
         function updateGlobalDashboard() {
@@ -1508,8 +1386,7 @@
             let totalUnits = 0, completedUnits = 0, activeTracks = 0, certs = 0;
             ids.forEach(id => {
                 const completed = JSON.parse(localStorage.getItem(`${id}_completed`)) || [];
-                totalUnits += 4;
-                completedUnits += completed.length;
+                totalUnits += 4; completedUnits += completed.length;
                 if (completed.length > 0) activeTracks++;
                 if (completed.length >= 4) certs++;
             });
@@ -1522,6 +1399,7 @@
             renderJobs();
             updateChallengeUI();
             renderBadges();
+            loadLab('finance');
         }
 
         window.addEventListener('DOMContentLoaded', updateGlobalDashboard);
