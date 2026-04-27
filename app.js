@@ -39,7 +39,7 @@ const App = {
             safety: '🛡️', vision: '👁️', mlops: '🏗️', robotics: '🦾', 
             finance: '🏦', healthcare: '🏥', creative: '🎨', law: '⚖️',
             governance: '📋', audit: '🔍', security: '⚔️', energy: '⚡', defense: '🛰️',
-            cyber: '🏴‍☠️', education: '🎓'
+            cyber: '🏴‍☠️', education: '🎓', marketing: '📈', logistics: '📦'
         };
 
         // Update Global Branding
