@@ -42,7 +42,8 @@ const App = {
             safety: '🛡️', vision: '👁️', mlops: '🏗️', robotics: '🦾', 
             finance: '🏦', healthcare: '🏥', creative: '🎨', law: '⚖️',
             governance: '📋', audit: '🔍', security: '⚔️', energy: '⚡', defense: '🛰️',
-            cyber: '🏴‍☠️', education: '🎓', marketing: '📈', logistics: '📦'
+            cyber: '🏴‍☠️', education: '🎓', marketing: '📈', logistics: '📦',
+            media: '🎮', retail: '🛍️'
         };
 
         // Update Global Branding
