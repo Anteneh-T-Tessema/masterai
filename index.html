@@ -309,6 +309,37 @@
         .employee-row .name { font-weight: 700; color: white; }
         .employee-row .progress-pill { color: var(--success-color); font-weight: 800; }
 
+        /* Enterprise Styling */
+        .view-toggle { display: flex; gap: 1rem; margin-bottom: 2rem; justify-content: center; }
+        .toggle-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        .toggle-btn.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .enterprise-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 20px; }
+        .stat-card .label { color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        .stat-card h3 { margin: 0.5rem 0 0; font-size: 2rem; color: white; }
+
+        .enterprise-table-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 1rem; margin-bottom: 2rem; }
+        .table-header, .employee-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; padding: 1rem; align-items: center; }
+        .table-header { color: var(--text-dim); font-size: 0.8rem; font-weight: 800; border-bottom: 1px solid var(--border-color); }
+        .employee-row { border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .employee-row .name { font-weight: 700; color: white; }
+        .employee-row .progress-pill { color: var(--success-color); font-weight: 800; }
+
         /* Licensing Styling */
         .enterprise-licensing { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 2rem; }
         .licensing-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem; margin-top: 1.5rem; }
@@ -328,6 +359,57 @@
         .tier.active { opacity: 1; border-color: var(--accent-color); background: rgba(99, 102, 241, 0.1); }
         .tier h4 { margin: 0; color: white; }
         .tier p { margin: 0.25rem 0 0; font-size: 0.8rem; color: var(--text-dim); }
+
+        /* Badge Wall Styling */
+        .badge-wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .mastery-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-align: center;
+            opacity: 0.2;
+            filter: grayscale(1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mastery-badge.unlocked {
+            opacity: 1;
+            filter: grayscale(0);
+            transform: translateY(-5px);
+        }
+
+        .badge-circle {
+            width: 70px;
+            height: 70px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            position: relative;
+        }
+
+        .mastery-badge.unlocked .badge-circle {
+            border-color: var(--accent-color);
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2), transparent);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .badge-label { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+        .mastery-badge.unlocked .badge-label { color: white; }
 
         /* Status Bar */
         .status-bar {
@@ -393,7 +475,7 @@
         <button class="toggle-btn" id="view-enterprise" onclick="switchView('enterprise')">Enterprise Portal</button>
     </div>
 
-    <!-- Individual Dashboard (Existing) -->
+    <!-- Individual Dashboard -->
     <div id="personal-dashboard">
         <div class="status-bar animate-slide-up">
             <div class="status-item">
@@ -411,6 +493,43 @@
             <div class="status-item">
                 <span class="status-value" id="certs-earned">0</span>
                 <span class="status-label">Certificates</span>
+            </div>
+        </div>
+
+        <div class="track-title" style="margin-top: 4rem">Specialization Mastery Gallery</div>
+        <div class="badge-wall animate-slide-up" id="badge-wall"></div>
+    </div>
+
+    <!-- Enterprise Command Center -->
+    <div id="enterprise-dashboard" style="display: none;">
+        <div class="enterprise-stats animate-slide-up">
+            <div class="stat-card"><span class="label">Organization</span><h3 id="ent-org-name">Loading...</h3></div>
+            <div class="stat-card"><span class="label">Team Mastery</span><h3 id="ent-team-mastery">0%</h3></div>
+            <div class="stat-card"><span class="label">Licenses Active</span><h3 id="ent-licenses">0/0</h3></div>
+        </div>
+
+        <div class="enterprise-table-container animate-slide-up">
+            <div class="table-header"><span>Employee</span><span>Role</span><span>Progress</span><span>Certifications</span><span>Action</span></div>
+            <div id="employee-list"></div>
+        </div>
+
+        <div class="enterprise-licensing animate-slide-up">
+            <div class="licensing-header"><h3>Seat Management & Bulk Licensing</h3><p>Scale your team with tiered pricing.</p></div>
+            <div class="licensing-grid">
+                <div class="pricing-calculator">
+                    <label>Number of Seats</label>
+                    <div class="seat-input-group"><input type="number" id="seat-count" value="10" min="1" oninput="calculateEnterprisePrice()"><span class="seat-label">Seats</span></div>
+                    <div class="price-breakdown">
+                        <div class="price-row"><span>Price per Seat:</span><span id="price-per-seat">$49.00</span></div>
+                        <div class="price-row total"><span>Total Annual:</span><span id="enterprise-total">$490.00</span></div>
+                    </div>
+                    <button class="nav-btn primary" style="width: 100%; margin-top: 1.5rem" onclick="checkoutEnterprise()">Initialize Corporate Checkout</button>
+                </div>
+                <div class="tier-info">
+                    <div class="tier active" id="tier-1"><h4>Starter (1-10)</h4><p>$49 / seat</p></div>
+                    <div class="tier" id="tier-2"><h4>Growth (11-50)</h4><p>$39 / seat</p></div>
+                    <div class="tier" id="tier-3"><h4>Scale (51+)</h4><p>$29 / seat</p></div>
+                </div>
             </div>
         </div>
     </div>
@@ -1366,6 +1485,23 @@
             }
         }
 
+        function renderBadges() {
+            const wall = document.getElementById('badge-wall');
+            if (!wall) return;
+            const registry = window.ACADEMY_REGISTRY;
+            
+            wall.innerHTML = Object.keys(registry).map(id => {
+                const completed = JSON.parse(localStorage.getItem(`${id}_completed`)) || [];
+                const isUnlocked = completed.length >= 4;
+                return `
+                    <div class="mastery-badge ${isUnlocked ? 'unlocked' : ''}" title="${registry[id].title}">
+                        <div class="badge-circle">${registry[id].icon}</div>
+                        <div class="badge-label">${id.substring(0, 8)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         function updateGlobalDashboard() {
             const registry = window.ACADEMY_REGISTRY;
             const ids = Object.keys(registry);
@@ -1385,6 +1521,7 @@
             renderLeaderboard(completedUnits * 100, activeTracks);
             renderJobs();
             updateChallengeUI();
+            renderBadges();
         }
 
         window.addEventListener('DOMContentLoaded', updateGlobalDashboard);
