@@ -43,7 +43,8 @@ const App = {
             finance: '🏦', healthcare: '🏥', creative: '🎨', law: '⚖️',
             governance: '📋', audit: '🔍', security: '⚔️', energy: '⚡', defense: '🛰️',
             cyber: '🏴‍☠️', education: '🎓', marketing: '📈', logistics: '📦',
-            media: '🎮', retail: '🛍️'
+            media: '🎮', retail: '🛍️', agri: '🚜', hr: '👥', proptech: '🏠',
+            smartcity: '🏙️', climate: '🌍'
         };
 
         // Update Global Branding
