@@ -278,29 +278,36 @@
         }
         .cta-primary:hover::after { opacity: 1; }
 
-        /* Challenge Styling */
-        .challenge-card {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.1));
-            border: 1px solid var(--accent-color);
-            border-radius: 24px;
-            padding: 2rem;
-            margin-bottom: 3rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
+        /* Enterprise Styling */
+        .view-toggle { display: flex; gap: 1rem; margin-bottom: 2rem; justify-content: center; }
+        .toggle-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        .toggle-btn.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
         }
 
-        .challenge-info { display: flex; align-items: center; gap: 1.5rem; flex: 1; }
-        .challenge-info h3 { margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.5rem; }
-        .challenge-info p { color: var(--text-dim); margin: 0.25rem 0 0; }
-        .badge-icon { font-size: 3rem; }
+        .enterprise-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 20px; }
+        .stat-card .label { color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        .stat-card h3 { margin: 0.5rem 0 0; font-size: 2rem; color: white; }
 
-        .challenge-progress { flex: 2; min-width: 300px; }
-        .progress-stats { display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-weight: 700; }
-        
-        .challenge-actions { display: flex; flex-direction: column; gap: 0.75rem; }
+        .enterprise-table-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 1rem; }
+        .table-header, .employee-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; padding: 1rem; align-items: center; }
+        .table-header { color: var(--text-dim); font-size: 0.8rem; font-weight: 800; border-bottom: 1px solid var(--border-color); }
+        .employee-row { border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .employee-row .name { font-weight: 700; color: white; }
+        .employee-row .progress-pill { color: var(--success-color); font-weight: 800; }
 
         /* Status Bar */
         .status-bar {
@@ -361,22 +368,61 @@
         </div>
     </header>
 
-    <div class="status-bar animate-slide-up">
-        <div class="status-item">
-            <span class="status-value" id="total-tracks-count">50</span>
-            <span class="status-label">Tracks</span>
+    <div class="view-toggle animate-slide-up">
+        <button class="toggle-btn active" id="view-personal" onclick="switchView('personal')">Individual Dashboard</button>
+        <button class="toggle-btn" id="view-enterprise" onclick="switchView('enterprise')">Enterprise Portal</button>
+    </div>
+
+    <!-- Individual Dashboard (Existing) -->
+    <div id="personal-dashboard">
+        <div class="status-bar animate-slide-up">
+            <div class="status-item">
+                <span class="status-value" id="total-tracks-count">50</span>
+                <span class="status-label">Tracks</span>
+            </div>
+            <div class="status-item">
+                <span class="status-value" id="academy-mastery">0%</span>
+                <span class="status-label">Global Mastery</span>
+            </div>
+            <div class="status-item">
+                <span class="status-value" id="global-streak">1</span>
+                <span class="status-label">Day Streak</span>
+            </div>
+            <div class="status-item">
+                <span class="status-value" id="certs-earned">0</span>
+                <span class="status-label">Certificates</span>
+            </div>
         </div>
-        <div class="status-item">
-            <span class="status-value" id="academy-mastery">0%</span>
-            <span class="status-label">Global Mastery</span>
+    </div>
+
+    <!-- Enterprise Command Center (New) -->
+    <div id="enterprise-dashboard" style="display: none;">
+        <div class="enterprise-stats animate-slide-up">
+            <div class="stat-card">
+                <span class="label">Organization</span>
+                <h3 id="ent-org-name">Loading...</h3>
+            </div>
+            <div class="stat-card">
+                <span class="label">Team Mastery</span>
+                <h3 id="ent-team-mastery">0%</h3>
+            </div>
+            <div class="stat-card">
+                <span class="label">Licenses Active</span>
+                <h3 id="ent-licenses">0/0</h3>
+            </div>
         </div>
-        <div class="status-item">
-            <span class="status-value" id="global-streak">1</span>
-            <span class="status-label">Day Streak</span>
-        </div>
-        <div class="status-item">
-            <span class="status-value" id="certs-earned">0</span>
-            <span class="status-label">Certificates</span>
+
+        <div class="enterprise-table-container animate-slide-up">
+            <div class="table-header">
+                <span>Employee</span>
+                <span>Role</span>
+                <span>Progress</span>
+                <span>Certifications</span>
+                <span>Action</span>
+            </div>
+            <div id="employee-list">
+                <!-- Dynamic Employee Injection -->
+            </div>
         </div>
     </div>
 
@@ -1106,12 +1152,36 @@
             }
         }
 
-    <script src="data/registry.js"></script>
-    <script src="data/news.js"></script>
-    <script src="data/leaderboard.js"></script>
-    <script src="data/jobs.js"></script>
-    <script src="data/badges.js"></script>
+    <script src="data/enterprise.js"></script>
     <script>
+        function switchView(view) {
+            document.getElementById('personal-dashboard').style.display = view === 'personal' ? 'block' : 'none';
+            document.getElementById('enterprise-dashboard').style.display = view === 'enterprise' ? 'block' : 'none';
+            
+            document.getElementById('view-personal').classList.toggle('active', view === 'personal');
+            document.getElementById('view-enterprise').classList.toggle('active', view === 'enterprise');
+            
+            if (view === 'enterprise') renderEnterprise();
+        }
+
+        function renderEnterprise() {
+            const data = window.ACADEMY_ENTERPRISE;
+            document.getElementById('ent-org-name').textContent = data.organization;
+            document.getElementById('ent-team-mastery').textContent = data.team_mastery;
+            document.getElementById('ent-licenses').textContent = `${data.licenses.active}/${data.licenses.total}`;
+
+            const list = document.getElementById('employee-list');
+            list.innerHTML = data.employees.map(emp => `
+                <div class="employee-row">
+                    <div class="name">${emp.name}</div>
+                    <div class="role">${emp.role}</div>
+                    <div class="progress-pill">${emp.progress}</div>
+                    <div class="certs">${emp.certs} Certificates</div>
+                    <div><button class="nav-btn" onclick="alert('Viewing full audit for ${emp.name}...')">View Audit</button></div>
+                </div>
+            `).join('');
+        }
+
         function renderNews() {
             const newsGrid = document.getElementById('news-grid');
             if (!newsGrid) return;
