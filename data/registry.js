@@ -28,5 +28,10 @@ window.ACADEMY_REGISTRY = {
     "hr": { "title": "AI for HR & Talent", "icon": "👥", "file": "data/hr_basics.js" },
     "proptech": { "title": "AI for PropTech", "icon": "🏠", "file": "data/proptech_basics.js" },
     "smartcity": { "title": "AI for Smart Cities", "icon": "🏙️", "file": "data/smartcity_basics.js" },
-    "climate": { "title": "AI for Climate Science", "icon": "🌍", "file": "data/climate_basics.js" }
+    "climate": { "title": "AI for Climate Science", "icon": "🌍", "file": "data/climate_basics.js" },
+    "mining": { "title": "AI for Mining & Resources", "icon": "⛏️", "file": "data/mining_basics.js" },
+    "marine": { "title": "AI for Marine & Oceans", "icon": "🌊", "file": "data/marine_basics.js" },
+    "tourism": { "title": "AI for Hospitality & Tourism", "icon": "🏨", "file": "data/tourism_basics.js" },
+    "safety_spec": { "title": "AI for Public Safety & Emergency", "icon": "🚨", "file": "data/safety_specialist.js" },
+    "materials": { "title": "AI for Materials Science", "icon": "🧪", "file": "data/materials_basics.js" }
 };
