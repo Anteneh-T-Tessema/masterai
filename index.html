@@ -1359,8 +1359,42 @@
             wall.innerHTML = Object.keys(registry).map(id => {
                 const completed = JSON.parse(localStorage.getItem(`${id}_completed`)) || [];
                 const isUnlocked = completed.length >= 4;
-                return `<div class="mastery-badge ${isUnlocked ? 'unlocked' : ''}" title="${registry[id].title}"><div class="badge-circle">${registry[id].icon}</div><div class="badge-label">${id.substring(0, 8)}</div></div>`;
+                return `
+                    <div class="mastery-badge ${isUnlocked ? 'unlocked' : ''}" 
+                         onclick="${isUnlocked ? `openCredential('${id}')` : `alert('Locked: Complete 4 modules to unlock this Mastery Badge.')`}" 
+                         title="${registry[id].title}">
+                        <div class="badge-circle">${registry[id].icon}</div>
+                        <div class="badge-label">${id.substring(0, 8)}</div>
+                    </div>
+                `;
             }).join('');
+        }
+
+        function openCredential(trackId) {
+            const registry = window.ACADEMY_REGISTRY;
+            const track = registry[trackId];
+            const userName = "Frontier Specialist"; // In a real app, this would be the user's name
+            const verifyUrl = `${window.location.origin}${window.location.pathname.replace('index.html', '')}verify.html?track=${trackId}&user=${encodeURIComponent(userName)}`;
+            
+            const modalHtml = `
+                <div id="credential-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(10px);">
+                    <div class="premium-card" style="max-width: 500px; text-align: center; border: 1px solid var(--accent-color); box-shadow: 0 0 50px rgba(88, 166, 255, 0.3);">
+                        <div class="card-icon" style="font-size: 5rem">${track.icon}</div>
+                        <h2>${track.title} Mastery</h2>
+                        <p style="color: var(--text-dim); margin-bottom: 2rem">You have officially mastered the ${track.title} specialization. You can now share your verified credential.</p>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <a href="${verifyUrl}" target="_blank" class="nav-btn primary" style="text-decoration: none">View Official Verification</a>
+                            <button class="nav-btn" onclick="copyToClipboard('${verifyUrl}')">Copy Verification Link</button>
+                            <button class="nav-btn" style="background: none; border: 1px solid var(--border-color);" onclick="document.getElementById('credential-modal').remove()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => alert('Verification Link Copied to Clipboard!'));
         }
 
         function loadLab(id) {

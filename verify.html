@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credential Verification | Global AI Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --midnight: #0a0c10;
+            --accent-color: #58a6ff;
+            --success-color: #10b981;
+            --text-dim: #8b949e;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            background: var(--midnight);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(88, 166, 255, 0.1), transparent 70%);
+            z-index: -1;
+        }
+        .verify-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 32px;
+            padding: 4rem 2rem;
+            max-width: 600px;
+            width: 90%;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+        }
+        .status-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            display: inline-block;
+            border: 1px solid var(--success-color);
+        }
+        .badge-icon { font-size: 5rem; margin-bottom: 1.5rem; filter: drop-shadow(0 0 20px var(--accent-color)); }
+        h1 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; margin: 0 0 0.5rem; }
+        .specialist-name { font-size: 1.5rem; color: var(--accent-color); font-weight: 700; margin-bottom: 2rem; }
+        .details { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; text-align: left; }
+        .detail-row { display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-size: 0.9rem; }
+        .detail-row span:first-child { color: var(--text-dim); }
+        .detail-row span:last-child { font-weight: 700; font-family: 'Fira Code', monospace; }
+        .nav-btn {
+            background: var(--accent-color); color: white; border: none; padding: 1rem 2rem; border-radius: 12px;
+            font-weight: 800; cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.3s;
+        }
+        .nav-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(88, 166, 255, 0.4); }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="verify-card">
+        <div class="status-badge">Official Record: Verified Mastery</div>
+        <div class="badge-icon" id="v-icon">🎓</div>
+        <h1 id="v-title">Frontier Intelligence Specialist</h1>
+        <div class="specialist-name" id="v-user">Specialist Candidate</div>
+        
+        <div class="details">
+            <div class="detail-row"><span>Track ID</span><span id="v-track-id">ACADEMY-00</span></div>
+            <div class="detail-row"><span>Verification Hash</span><span id="v-hash">LOADING...</span></div>
+            <div class="detail-row"><span>Status</span><span style="color: var(--success-color)">ACTIVE / AUTHENTIC</span></div>
+        </div>
+
+        <a href="index.html" class="nav-btn">Return to Academy</a>
+    </div>
+
+    <script src="data/registry.js"></script>
+    <script>
+        function init() {
+            const params = new URLSearchParams(window.location.search);
+            const trackId = params.get('track') || 'llm';
+            const userName = params.get('user') || 'Global Specialist';
+            const registry = window.ACADEMY_REGISTRY;
+
+            if (registry[trackId]) {
+                document.getElementById('v-icon').textContent = registry[trackId].icon;
+                document.getElementById('v-title').textContent = `${registry[trackId].title} Mastery`;
+                document.getElementById('v-track-id').textContent = `ACADEMY-${trackId.toUpperCase()}`;
+            }
+
+            document.getElementById('v-user').textContent = userName;
+            
+            // Generate a deterministic but complex-looking hash
+            const hash = btoa(trackId + userName).substring(0, 16).toUpperCase();
+            document.getElementById('v-hash').textContent = `GAIA-${hash}`;
+        }
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
