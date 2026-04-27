@@ -302,12 +302,32 @@
         .stat-card .label { color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
         .stat-card h3 { margin: 0.5rem 0 0; font-size: 2rem; color: white; }
 
-        .enterprise-table-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 1rem; }
+        .enterprise-table-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 1rem; margin-bottom: 2rem; }
         .table-header, .employee-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; padding: 1rem; align-items: center; }
         .table-header { color: var(--text-dim); font-size: 0.8rem; font-weight: 800; border-bottom: 1px solid var(--border-color); }
         .employee-row { border-bottom: 1px solid rgba(255,255,255,0.05); }
         .employee-row .name { font-weight: 700; color: white; }
         .employee-row .progress-pill { color: var(--success-color); font-weight: 800; }
+
+        /* Licensing Styling */
+        .enterprise-licensing { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 2rem; }
+        .licensing-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem; margin-top: 1.5rem; }
+        
+        .pricing-calculator { background: rgba(255,255,255,0.03); border-radius: 16px; padding: 1.5rem; }
+        .seat-input-group { display: flex; align-items: center; gap: 1rem; margin: 1rem 0; }
+        .seat-input-group input { 
+            background: #000; border: 1px solid var(--border-color); color: white; 
+            padding: 0.75rem; border-radius: 8px; width: 100px; font-size: 1.2rem; font-weight: 800;
+        }
+
+        .price-breakdown { border-top: 1px solid var(--border-color); padding-top: 1rem; }
+        .price-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--text-dim); }
+        .price-row.total { font-size: 1.5rem; color: white; font-weight: 800; margin-top: 0.5rem; }
+
+        .tier { padding: 1rem; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 0.75rem; transition: all 0.3s; opacity: 0.5; }
+        .tier.active { opacity: 1; border-color: var(--accent-color); background: rgba(99, 102, 241, 0.1); }
+        .tier h4 { margin: 0; color: white; }
+        .tier p { margin: 0.25rem 0 0; font-size: 0.8rem; color: var(--text-dim); }
 
         /* Status Bar */
         .status-bar {
@@ -424,7 +444,50 @@
                 <!-- Dynamic Employee Injection -->
             </div>
         </div>
-    </div>
+
+        <!-- Seat Management & Licensing -->
+        <div class="enterprise-licensing animate-slide-up">
+            <div class="licensing-header">
+                <h3>Seat Management & Bulk Licensing</h3>
+                <p>Scale your team's intelligence with tiered corporate pricing.</p>
+            </div>
+            
+            <div class="licensing-grid">
+                <div class="pricing-calculator">
+                    <label>Number of Seats</label>
+                    <div class="seat-input-group">
+                        <input type="number" id="seat-count" value="10" min="1" oninput="calculateEnterprisePrice()">
+                        <span class="seat-label">Seats</span>
+                    </div>
+                    <div class="price-breakdown">
+                        <div class="price-row">
+                            <span>Price per Seat:</span>
+                            <span id="price-per-seat">$49.00</span>
+                        </div>
+                        <div class="price-row total">
+                            <span>Total Annual:</span>
+                            <span id="enterprise-total">$490.00</span>
+                        </div>
+                    </div>
+                    <button class="nav-btn primary" style="width: 100%; margin-top: 1.5rem" onclick="checkoutEnterprise()">Initialize Corporate Checkout</button>
+                </div>
+
+                <div class="tier-info">
+                    <div class="tier active" id="tier-1">
+                        <h4>Starter (1-10)</h4>
+                        <p>$49 / seat / year</p>
+                    </div>
+                    <div class="tier" id="tier-2">
+                        <h4>Growth (11-50)</h4>
+                        <p>$39 / seat / year</p>
+                    </div>
+                    <div class="tier" id="tier-3">
+                        <h4>Scale (51+)</h4>
+                        <p>$29 / seat / year</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     <!-- Global Learning Challenge -->
     <div id="challenge-section" class="challenge-card animate-slide-up" style="display: none;">
@@ -1164,22 +1227,49 @@
             if (view === 'enterprise') renderEnterprise();
         }
 
+        function calculateEnterprisePrice() {
+            const count = parseInt(document.getElementById('seat-count').value) || 0;
+            let price = 49;
+            let tier = 1;
+
+            if (count > 50) { price = 29; tier = 3; }
+            else if (count > 10) { price = 39; tier = 2; }
+
+            document.getElementById('price-per-seat').textContent = `$${price}.00`;
+            document.getElementById('enterprise-total').textContent = `$${(price * count).toLocaleString()}.00`;
+            
+            document.querySelectorAll('.tier').forEach((t, idx) => {
+                t.classList.toggle('active', idx + 1 === tier);
+            });
+        }
+
+        function checkoutEnterprise() {
+            const count = document.getElementById('seat-count').value;
+            const total = document.getElementById('enterprise-total').textContent;
+            alert(`Initiating Corporate Procurement:\n\nSeats: ${count}\nTotal: ${total}\n\nRedirecting to Enterprise Checkout...`);
+        }
+
         function renderEnterprise() {
             const data = window.ACADEMY_ENTERPRISE;
+            if(!document.getElementById('ent-org-name')) return;
+            
             document.getElementById('ent-org-name').textContent = data.organization;
             document.getElementById('ent-team-mastery').textContent = data.team_mastery;
             document.getElementById('ent-licenses').textContent = `${data.licenses.active}/${data.licenses.total}`;
 
             const list = document.getElementById('employee-list');
-            list.innerHTML = data.employees.map(emp => `
-                <div class="employee-row">
-                    <div class="name">${emp.name}</div>
-                    <div class="role">${emp.role}</div>
-                    <div class="progress-pill">${emp.progress}</div>
-                    <div class="certs">${emp.certs} Certificates</div>
-                    <div><button class="nav-btn" onclick="alert('Viewing full audit for ${emp.name}...')">View Audit</button></div>
-                </div>
-            `).join('');
+            if(list) {
+                list.innerHTML = data.employees.map(emp => `
+                    <div class="employee-row">
+                        <div class="name">${emp.name}</div>
+                        <div class="role">${emp.role}</div>
+                        <div class="progress-pill">${emp.progress}</div>
+                        <div class="certs">${emp.certs} Certificates</div>
+                        <div><button class="nav-btn" onclick="alert('Viewing audit for ${emp.name}')">Audit</button></div>
+                    </div>
+                `).join('');
+            }
+            calculateEnterprisePrice();
         }
 
         function renderNews() {
