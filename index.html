@@ -315,6 +315,12 @@
         </div>
     </header>
 
+    <!-- Academy Job Board Section -->
+    <div class="track-title" style="margin-top: 4rem">Career Frontier: Verified Opportunities</div>
+    <div class="grid-excellence" id="job-board-grid" style="margin-bottom: 4rem">
+        <!-- Dynamic Job Injection -->
+    </div>
+
     <!-- Global Leaderboard Section -->
     <div class="track-title" style="margin-top: 4rem">Top Minds of the Academy</div>
     <div class="leaderboard-container animate-slide-up">
@@ -922,6 +928,7 @@
         }
 
     <script src="data/leaderboard.js"></script>
+    <script src="data/jobs.js"></script>
     <script>
         function renderLeaderboard(userPoints, userTracks) {
             const list = document.getElementById('leaderboard-list');
@@ -946,6 +953,33 @@
                     <div class="tracks">${userTracks}</div>
                 `;
             }
+        }
+
+        function applyToJob(trackId, title) {
+            const completed = JSON.parse(localStorage.getItem(`${trackId}_completed`)) || [];
+            if (completed.length < 4) {
+                alert(`Locked: Certification Required\n\nTo apply for the "${title}" position, you must first earn your Verified Certificate in the "${trackId.toUpperCase()}" specialization.`);
+            } else {
+                alert(`Verified Application Sent!\n\nYour certificate for ${trackId.toUpperCase()} has been attached to your application for "${title}". Good luck!`);
+            }
+        }
+
+        function renderJobs() {
+            const jobGrid = document.getElementById('job-board-grid');
+            if (!jobGrid) return;
+
+            jobGrid.innerHTML = window.ACADEMY_JOBS.map(job => `
+                <div class="premium-card card-medium animate-slide-up">
+                    <div class="card-badge">${job.type}</div>
+                    <div style="color: var(--accent-color); font-weight: 800; font-size: 0.8rem; margin-bottom: 0.5rem">${job.company}</div>
+                    <h3>${job.title}</h3>
+                    <p>${job.location} • ${job.salary}</p>
+                    <div style="margin-bottom: 1.5rem; font-size: 0.8rem; color: var(--text-dim)">
+                        Requires: <b>${job.required_track.toUpperCase()} SPECIALIZATION</b>
+                    </div>
+                    <button class="nav-btn primary" onclick="applyToJob('${job.required_track}', '${job.title}')" style="width: 100%">Verify & Apply</button>
+                </div>
+            `).join('');
         }
 
         function updateGlobalDashboard() {
@@ -976,6 +1010,7 @@
             
             renderNews();
             renderLeaderboard(userPoints, activeTracks);
+            renderJobs();
         }
 
         window.addEventListener('DOMContentLoaded', updateGlobalDashboard);
