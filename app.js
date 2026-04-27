@@ -455,8 +455,34 @@ const App = {
 
         this.els.nav.style.display = "flex";
         this.els.breadcrumb.innerHTML = `Module ${chapter.id} &rsaquo; ${unit.title}`;
+
+        // YouTube Video Engine Integration
+        const contributor = (window.ACADEMY_CONTRIBUTORS || []).find(c => c.specialization.toLowerCase().includes(this.state.title.toLowerCase()) || c.id === 'creator_01');
+        const video = contributor ? contributor.videos[0] : null;
+
+        const videoHtml = video ? `
+            <div class="video-cinematic-container" style="margin-bottom: 3rem; background: #000; border-radius: 24px; overflow: hidden; border: 1px solid var(--glass-border); box-shadow: 0 30px 60px rgba(0,0,0,0.5);">
+                <div class="video-ratio" style="position: relative; padding-bottom: 56.25%; height: 0;">
+                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                        src="https://www.youtube.com/embed/${video.youtube_id}?modestbranding=1&rel=0" 
+                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="contributor-attribution" style="padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.02);">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-size: 1.5rem">${contributor.avatar}</span>
+                        <div>
+                            <div style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em;">Featured Contributor</div>
+                            <div style="font-weight: 700;">${contributor.name}</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--accent-color); font-weight: 800;">${video.title}</div>
+                </div>
+            </div>
+        ` : '';
         
         this.els.content.innerHTML = `
+            ${videoHtml}
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem">
                 <h1 style="font-size: 2rem; font-weight: 700">${unit.title}</h1>
                 <button onclick="toggleBookmark(${cIdx}, ${uIdx})" class="nav-btn" style="padding: 0.5rem 1rem; font-size: 0.75rem; border-color: ${isBookmarked ? 'var(--accent-color)' : 'var(--glass-border)'}">
