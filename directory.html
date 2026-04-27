@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verified Professional Directory | Global AI Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --midnight: #0a0c10;
+            --accent-color: #58a6ff;
+            --success-color: #10b981;
+            --text-dim: #8b949e;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            background: var(--midnight);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 4rem; }
+        h1 { font-family: 'Outfit', sans-serif; font-size: 3rem; margin: 0; letter-spacing: -0.02em; }
+        .subtitle { color: var(--text-dim); font-size: 1.1rem; margin-top: 1rem; }
+        
+        /* Filters */
+        .filters {
+            display: flex; gap: 1rem; margin-bottom: 3rem; background: var(--glass-bg); padding: 1.5rem;
+            border-radius: 20px; border: 1px solid var(--border-color); backdrop-filter: blur(10px);
+        }
+        .search-input {
+            flex: 1; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 1rem; color: white; outline: none; font-size: 1rem;
+        }
+        .filter-select {
+            background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 1rem; color: white; outline: none;
+        }
+
+        /* Grid */
+        .directory-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem;
+        }
+        .specialist-card {
+            background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 24px;
+            padding: 2rem; transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .specialist-card:hover { transform: translateY(-5px); border-color: var(--accent-color); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .card-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .avatar { font-size: 3rem; background: rgba(255,255,255,0.05); width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 20px; }
+        .name { font-size: 1.5rem; font-weight: 700; font-family: 'Outfit', sans-serif; }
+        .location { color: var(--text-dim); font-size: 0.8rem; margin-top: 0.25rem; }
+        
+        .status-pill {
+            position: absolute; top: 20px; right: 20px; font-size: 0.6rem; font-weight: 900;
+            background: rgba(16, 185, 129, 0.1); color: var(--success-color); padding: 5px 12px;
+            border-radius: 5px; border: 1px solid var(--success-color); letter-spacing: 0.1em;
+        }
+
+        .mastery-badges { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+        .badge-mini { background: rgba(255,255,255,0.05); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border: 1px solid var(--border-color); }
+
+        .skills-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
+        .skill-tag { background: rgba(88, 166, 255, 0.1); color: var(--accent-color); font-size: 0.7rem; padding: 4px 10px; border-radius: 50px; font-weight: 700; }
+
+        .hire-btn {
+            background: var(--accent-color); color: white; border: none; padding: 1rem; border-radius: 12px;
+            width: 100%; font-weight: 800; cursor: pointer; transition: all 0.3s;
+        }
+        .hire-btn:hover { box-shadow: 0 10px 20px rgba(88, 166, 255, 0.3); }
+
+        .nav-link { position: absolute; top: 2rem; left: 2rem; color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
+        .nav-link:hover { color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-link">← Return to Academy Portal</a>
+        
+        <header>
+            <div style="font-size: 0.8rem; color: var(--accent-color); font-weight: 900; letter-spacing: 0.2em; margin-bottom: 1rem;">SOURCE OF TRUTH</div>
+            <h1>Verified Professional Directory</h1>
+            <div class="subtitle">Search the global database of elite specialists certified across 50 industrial AI tracks.</div>
+        </header>
+
+        <div class="filters">
+            <input type="text" id="search" class="search-input" placeholder="Search by name or skill (e.g. 'Neural Arbitrage')..." oninput="renderDirectory()">
+            <select id="track-filter" class="filter-select" onchange="renderDirectory()">
+                <option value="all">All Specializations</option>
+                <option value="finance">Finance</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="defense">Defense</option>
+                <option value="quantum">Quantum</option>
+                <option value="space">Space</option>
+            </select>
+        </div>
+
+        <div class="directory-grid" id="directory-grid">
+            <!-- Dynamic Specialist Injection -->
+        </div>
+    </div>
+
+    <script src="data/registry.js"></script>
+    <script src="data/specialists.js"></script>
+    <script>
+        function renderDirectory() {
+            const grid = document.getElementById('directory-grid');
+            const search = document.getElementById('search').value.toLowerCase();
+            const filter = document.getElementById('track-filter').value;
+            const specialists = window.ACADEMY_SPECIALISTS;
+
+            const filtered = specialists.filter(spec => {
+                const matchesSearch = spec.name.toLowerCase().includes(search) || spec.top_skills.some(s => s.toLowerCase().includes(search));
+                const matchesTrack = filter === 'all' || spec.tracks.includes(filter);
+                return matchesSearch && matchesTrack;
+            });
+
+            grid.innerHTML = filtered.map(spec => `
+                <div class="specialist-card">
+                    <div class="status-pill">${spec.status}</div>
+                    <div class="card-header">
+                        <div class="avatar">${spec.avatar}</div>
+                        <div>
+                            <div class="name">${spec.name}</div>
+                            <div class="location">📍 ${spec.location}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;">Mastery Certifications (${spec.mastery_count})</div>
+                    <div class="mastery-badges">
+                        ${spec.tracks.slice(0, 5).map(t => `<div class="badge-mini" title="${t}">${window.ACADEMY_REGISTRY[t]?.icon || '🎓'}</div>`).join('')}
+                        ${spec.tracks.length > 5 ? `<div class="badge-mini" style="font-size: 0.6rem; font-weight: 800;">+${spec.tracks.length - 5}</div>` : ''}
+                    </div>
+
+                    <div style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;">Verified Competencies</div>
+                    <div class="skills-list">
+                        ${spec.top_skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                    </div>
+
+                    <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 1.5rem; font-style: italic;">"${spec.availability}"</div>
+
+                    <button class="hire-btn" onclick="alert('Initializing secure communication with ${spec.name}...')">Request Institutional Connection</button>
+                </div>
+            `).join('');
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 5rem; color: var(--text-dim);">No specialists found matching your criteria.</div>`;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', renderDirectory);
+    </script>
+</body>
+</html>

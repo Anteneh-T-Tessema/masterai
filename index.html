@@ -420,6 +420,7 @@
         <button class="toggle-btn active" id="view-personal" onclick="switchView('personal')">Individual Dashboard</button>
         <button class="toggle-btn" id="view-enterprise" onclick="switchView('enterprise')">Enterprise Portal</button>
         <button class="toggle-btn" id="view-creator" onclick="switchView('creator')">Creator Marketplace</button>
+        <a href="directory.html" class="toggle-btn" style="text-decoration: none; border-left: 1px solid var(--border-color); color: var(--accent-color)">Verified Directory</a>
     </div>
 
     <!-- Individual Dashboard -->
@@ -528,7 +529,10 @@
     </div>
 
     <!-- Academy Job Board Section -->
-    <div id="career-start" class="track-title" style="margin-top: 4rem">Career Frontier: Verified Opportunities</div>
+    <div id="career-start" class="track-title" style="margin-top: 4rem; display: flex; justify-content: space-between; align-items: center;">
+        <span>Career Frontier: Verified Opportunities</span>
+        <a href="directory.html" class="nav-btn" style="font-size: 0.7rem; border-color: var(--accent-color); color: var(--accent-color);">View Specialist Directory</a>
+    </div>
     
     <div class="job-filters animate-slide-up">
         <div class="search-box">
