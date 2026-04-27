@@ -278,6 +278,30 @@
         }
         .cta-primary:hover::after { opacity: 1; }
 
+        /* Challenge Styling */
+        .challenge-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.1));
+            border: 1px solid var(--accent-color);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .challenge-info { display: flex; align-items: center; gap: 1.5rem; flex: 1; }
+        .challenge-info h3 { margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.5rem; }
+        .challenge-info p { color: var(--text-dim); margin: 0.25rem 0 0; }
+        .badge-icon { font-size: 3rem; }
+
+        .challenge-progress { flex: 2; min-width: 300px; }
+        .progress-stats { display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-weight: 700; }
+        
+        .challenge-actions { display: flex; flex-direction: column; gap: 0.75rem; }
+
         /* Status Bar */
         .status-bar {
             background: var(--glass-bg);
@@ -327,17 +351,7 @@
             </a>
         </div>
 
-        <div class="status-bar animate-slide-up">
-        <div class="status-item">
-            <span class="status-value" id="total-tracks-count">40</span>
-            <span class="status-label">Tracks</span>
-        </div>
-        <div class="status-item">
-            <span class="status-value" id="academy-mastery">0%</span>
-            <span class="status-label">Global Mastery</span>
-        </div>
-        <div class="status-item">
-            <header class="academy-hero">
+        <header class="academy-hero">
         <h1>Global AI Academy</h1>
         <p class="hero-subtitle">The definitive 50-track specialization ecosystem for the 21st Century.</p>
         
@@ -346,6 +360,49 @@
             <a href="#news-start" class="cta-secondary">Latest Frontier News</a>
         </div>
     </header>
+
+    <div class="status-bar animate-slide-up">
+        <div class="status-item">
+            <span class="status-value" id="total-tracks-count">50</span>
+            <span class="status-label">Tracks</span>
+        </div>
+        <div class="status-item">
+            <span class="status-value" id="academy-mastery">0%</span>
+            <span class="status-label">Global Mastery</span>
+        </div>
+        <div class="status-item">
+            <span class="status-value" id="global-streak">1</span>
+            <span class="status-label">Day Streak</span>
+        </div>
+        <div class="status-item">
+            <span class="status-value" id="certs-earned">0</span>
+            <span class="status-label">Certificates</span>
+        </div>
+    </div>
+
+    <!-- Global Learning Challenge -->
+    <div id="challenge-section" class="challenge-card animate-slide-up" style="display: none;">
+        <div class="challenge-info">
+            <div class="badge-icon" id="challenge-badge">🎯</div>
+            <div>
+                <h3>30-Day AI Frontier Challenge</h3>
+                <p id="challenge-status">Join the world's elite in mastering 50 AI tracks.</p>
+            </div>
+        </div>
+        <div class="challenge-progress">
+            <div class="progress-stats">
+                <span id="challenge-day-count">Day 1 of 30</span>
+                <span id="challenge-percent">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="challenge-fill" style="width: 0%"></div>
+            </div>
+        </div>
+        <div class="challenge-actions">
+            <button class="nav-btn primary" id="challenge-btn" onclick="startChallenge()">Start Challenge</button>
+            <button class="nav-btn" id="challenge-share" style="display: none;" onclick="shareChallengeProgress()">Share Day Progress</button>
+        </div>
+    </div>
 
     <!-- Academy Job Board Section -->
     <div id="career-start" class="track-title" style="margin-top: 4rem">Career Frontier: Verified Opportunities</div>
@@ -1049,14 +1106,110 @@
             }
         }
 
+    <script src="data/registry.js"></script>
+    <script src="data/news.js"></script>
+    <script src="data/leaderboard.js"></script>
+    <script src="data/jobs.js"></script>
+    <script src="data/badges.js"></script>
+    <script>
+        function renderNews() {
+            const newsGrid = document.getElementById('news-grid');
+            if (!newsGrid) return;
+            const news = window.ACADEMY_NEWS.slice(0, 3);
+            newsGrid.innerHTML = news.map((item, idx) => `
+                <div class="premium-card ${idx === 0 ? 'card-large' : 'card-medium'} animate-slide-up" style="animation-delay: ${idx * 0.1}s">
+                    <div class="card-badge">${item.category}</div>
+                    <div style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 0.5rem">${item.date}</div>
+                    <h3>${item.title}</h3>
+                    <p>${item.summary || item.content}</p>
+                    <div class="card-action">READ INSIGHT</div>
+                </div>
+            `).join('');
+        }
+
+        function renderLeaderboard(userPoints, userTracks) {
+            const list = document.getElementById('leaderboard-list');
+            const userBox = document.getElementById('user-rank-box');
+            if (!list) return;
+            list.innerHTML = window.ACADEMY_LEADERBOARD.map(item => `
+                <div class="leaderboard-row">
+                    <div class="rank">#${item.rank}</div>
+                    <div class="name"><span>${item.avatar}</span> ${item.name}</div>
+                    <div class="points">${item.points.toLocaleString()}</div>
+                    <div class="tracks">${item.tracks}</div>
+                </div>
+            `).join('');
+            if (userPoints > 0) {
+                userBox.style.display = 'grid';
+                userBox.innerHTML = `<div class="rank">YOU</div><div class="name">🚀 Frontier Specialist</div><div class="points">${userPoints.toLocaleString()}</div><div class="tracks">${userTracks}</div>`;
+            }
+        }
+
+        function applyToJob(trackId, title) {
+            const completed = JSON.parse(localStorage.getItem(`${trackId}_completed`)) || [];
+            if (completed.length < 4) alert(`Locked: Certification Required for ${title}`);
+            else alert(`Verified Application Sent for ${title}!`);
+        }
+
+        function renderJobs() {
+            const jobGrid = document.getElementById('job-board-grid');
+            const search = document.getElementById('job-search')?.value.toLowerCase() || '';
+            if (!jobGrid) return;
+            const filteredJobs = window.ACADEMY_JOBS.filter(job => 
+                (job.title.toLowerCase().includes(search) || job.company.toLowerCase().includes(search)) && 
+                (window.currentJobFilter === 'all' || job.category === window.currentJobFilter)
+            );
+            jobGrid.innerHTML = filteredJobs.map(job => `
+                <div class="premium-card card-medium animate-slide-up">
+                    <div class="card-badge">${job.type}</div>
+                    <h3>${job.title}</h3>
+                    <p>${job.company} • ${job.location}</p>
+                    <button class="nav-btn primary" onclick="applyToJob('${job.required_track}', '${job.title}')" style="width: 100%">Verify & Apply</button>
+                </div>
+            `).join('');
+        }
+
+        window.currentJobFilter = 'all';
+        function setJobFilter(filter) {
+            window.currentJobFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('active', btn.textContent.toLowerCase().includes(filter.toLowerCase())));
+            renderJobs();
+        }
+
+        function startChallenge() {
+            const today = new Date().toDateString();
+            localStorage.setItem('challenge_days', JSON.stringify([today]));
+            updateChallengeUI();
+        }
+
+        function shareChallengeProgress() {
+            const days = JSON.parse(localStorage.getItem('challenge_days')) || [];
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank');
+        }
+
+        function updateChallengeUI() {
+            const days = JSON.parse(localStorage.getItem('challenge_days')) || [];
+            const section = document.getElementById('challenge-section');
+            if (days.length > 0) {
+                section.style.display = 'flex';
+                document.getElementById('challenge-btn').style.display = 'none';
+                document.getElementById('challenge-share').style.display = 'block';
+                const percent = Math.round((days.length / 30) * 100);
+                document.getElementById('challenge-fill').style.width = `${percent}%`;
+                document.getElementById('challenge-day-count').textContent = `Day ${days.length} of 30`;
+                document.getElementById('challenge-percent').textContent = `${percent}%`;
+                if (days.length >= 30) document.getElementById('challenge-badge').textContent = '👑';
+                else if (days.length >= 20) document.getElementById('challenge-badge').textContent = '🧠';
+                else if (days.length >= 10) document.getElementById('challenge-badge').textContent = '🚀';
+            } else {
+                section.style.display = 'flex';
+            }
+        }
+
         function updateGlobalDashboard() {
             const registry = window.ACADEMY_REGISTRY;
             const ids = Object.keys(registry);
-            let totalUnits = 0;
-            let completedUnits = 0;
-            let certs = 0;
-            let activeTracks = 0;
-
+            let totalUnits = 0, completedUnits = 0, activeTracks = 0, certs = 0;
             ids.forEach(id => {
                 const completed = JSON.parse(localStorage.getItem(`${id}_completed`)) || [];
                 totalUnits += 4;
@@ -1064,20 +1217,14 @@
                 if (completed.length > 0) activeTracks++;
                 if (completed.length >= 4) certs++;
             });
-
             const mastery = Math.round((completedUnits / totalUnits) * 100) || 0;
-            const userPoints = completedUnits * 100;
-
             if(document.getElementById('academy-mastery')) document.getElementById('academy-mastery').textContent = `${mastery}%`;
             if(document.getElementById('certs-earned')) document.getElementById('certs-earned').textContent = certs;
             if(document.getElementById('total-tracks-count')) document.getElementById('total-tracks-count').textContent = ids.length;
-            
-            const streak = localStorage.getItem('global_streak') || 1;
-            if(document.getElementById('global-streak')) document.getElementById('global-streak').textContent = streak;
-            
             renderNews();
-            renderLeaderboard(userPoints, activeTracks);
+            renderLeaderboard(completedUnits * 100, activeTracks);
             renderJobs();
+            updateChallengeUI();
         }
 
         window.addEventListener('DOMContentLoaded', updateGlobalDashboard);
