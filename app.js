@@ -18,10 +18,13 @@ const App = {
         unitScores: {}, 
         selectedAnswers: {}, 
         searchQuery: '',
-        theme: 'light'
+        theme: 'light',
+        streak: parseInt(localStorage.getItem('global_streak')) || 0,
+        lastVisit: localStorage.getItem('global_last_visit') || ''
     },
 
     init() {
+        this.updateStreak();
         // Load data specific to this course
         this.state.completedUnits = JSON.parse(localStorage.getItem(`${this.state.id}_completed`)) || [];
         this.state.bookmarks = JSON.parse(localStorage.getItem(`${this.state.id}_bookmarks`)) || [];
@@ -112,6 +115,27 @@ const App = {
         window.exportStudyMaterials = () => this.exportStudyMaterials();
     },
 
+    updateStreak() {
+        const today = new Date().toDateString();
+        if (this.state.lastVisit === today) return;
+        
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        if (this.state.lastVisit === yesterday.toDateString()) {
+            this.state.streak++;
+        } else {
+            this.state.streak = 1;
+        }
+        
+        this.state.lastVisit = today;
+        localStorage.setItem('global_streak', this.state.streak);
+        localStorage.setItem('global_last_visit', today);
+        
+        const streakEl = document.getElementById('global-streak');
+        if (streakEl) streakEl.textContent = this.state.streak;
+    },
+
     loadDashboard() {
         this.state.currentView = 'dashboard';
         this.state.currentChapter = -1;
@@ -181,23 +205,6 @@ const App = {
         this.state.currentChapter = -1;
         this.saveState();
         
-        this.els.breadcrumb.textContent = "Interactive Lab &rsaquo; Prompt Playground";
-        this.els.nav.style.display = "none";
-        this.renderSidebar();
-
-        this.els.content.innerHTML = `
-            <div class="playground-view" style="animation: slideUp 0.5s ease-out">
-                <h2>Prompt Engineering Playground</h2>
-                <p style="margin-bottom: 2rem">Simulate LLM behaviors by testing different prompting techniques.</p>
-                
-                <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap: 2rem">
-                    <div class="lab-sidebar">
-                        <h4 style="margin-bottom: 1rem">1. Select Technique</h4>
-                        ${Object.keys(this.state.scenarios).map(key => `
-                            <div class="scenario-card" onclick="App.selectScenario('${key}')" id="scenario-${key}">
-                                <strong>${this.state.scenarios[key].title}</strong>
-                                <p style="font-size: 0.8rem; margin-top: 4px">${this.state.scenarios[key].description}</p>
-                            </div>
                         `).join('')}
                     </div>
                     

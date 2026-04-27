@@ -148,32 +148,49 @@
         .card-badge {
             position: absolute;
             top: 3rem; right: 3rem;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             color: var(--accent-color);
-            border: 1px solid var(--accent-color);
+            margin-bottom: 1rem;
+            background: rgba(99, 102, 241, 0.1);
             padding: 4px 12px;
-            border-radius: 50px;
+            border-radius: 100px;
+            width: fit-content;
         }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+        }
+
         .premium-card h3 {
             font-family: 'Outfit', sans-serif;
-            font-size: 2rem;
-            font-weight: 800;
+            font-size: 1.5rem;
             margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
+
         .premium-card p {
-            font-size: 1.1rem;
             color: var(--text-dim);
             line-height: 1.6;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            flex-grow: 1;
         }
+
         .card-action {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 0.5rem;
             font-weight: 700;
+            font-size: 0.9rem;
             color: var(--accent-color);
-            font-size: 1.1rem;
+            margin-top: auto;
         }
         .card-action svg { transition: transform 0.3s ease; }
         .premium-card:hover .card-action svg { transform: translateX(8px); }
@@ -206,14 +223,14 @@
             top: -50%; left: -50%; width: 200%; height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.4s;
         }
         .cta-primary:hover::after { opacity: 1; }
 
         /* Status Bar */
         .status-bar {
             background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border-color);
             border-radius: 20px;
             padding: 2rem 4rem;
             display: flex;
@@ -260,69 +277,73 @@
         </div>
 
         <div class="status-bar">
-            <div class="stat-item">
-                <span class="val">10+</span>
-                <span class="lbl">Expert Tracks</span>
-            </div>
-            <div class="stat-item">
-                <span class="val">80%</span>
-                <span class="lbl">Mastery Standard</span>
-            </div>
-            <div class="stat-item">
-                <span class="val">24/7</span>
-                <span class="lbl">Lab Access</span>
-            </div>
+        <div class="status-item">
+            <span class="status-value">23</span>
+            <span class="status-label">Tracks</span>
         </div>
+        <div class="status-item">
+            <span class="status-value" id="global-streak">1</span>
+            <span class="status-label">Day Streak</span>
+        </div>
+        <div class="status-item">
+            <span class="status-value">12.4k</span>
+            <span class="status-label">Graduates</span>
+        </div>
+        <div class="status-item">
+            <span class="status-value">4.9/5</span>
+            <span class="status-label">Rating</span>
+        </div>
+    </div>
     </header>
 
     <main class="catalog-content" id="catalog-start">
-        <!-- Track: Core Intelligence -->
-        <div class="track-title">Foundation & Mastery</div>
+        <!-- Track: Mastery Core -->
+        <div class="track-title">Mastery Core</div>
         <div class="grid-excellence">
-            <a href="llm_basics.html" class="premium-card">
-                <div class="card-badge">ADVANCED</div>
+            <a href="llm_basics.html" class="premium-card card-large">
+                <div class="card-badge">THE GOLDEN STANDARD</div>
                 <div class="card-icon">🧠</div>
-                <h3>LLM Basics: Golden Standard</h3>
-                <p>The ultimate specialization in Large Language Models. Transformers, RAG, PEFT, and RLHF aligned with industry rigor.</p>
+                <h3>LLM Foundations Specialist</h3>
+                <p>The definitive journey through Large Language Models. From the Transformer architecture and RAG (Retrieval-Augmented Generation) to production deployment and frontier interview prep.</p>
                 <div class="card-action">
-                    BEGIN SPECIALIZATION
+                    START SPECIALIZATION
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </div>
             </a>
 
-            <a href="nlp_specialization.html" class="premium-card">
-                <div class="card-badge">FOUNDATIONAL</div>
-                <div class="card-icon">💬</div>
-                <h3>NLP Specialist Program</h3>
-                <p>Master the architectural foundations of language modeling. From Word Embeddings to sequential deep learning.</p>
+            <a href="nlp_specialization.html" class="premium-card card-medium">
+                <div class="card-badge">FOUNDATIONS</div>
+                <div class="card-icon">📖</div>
+                <h3>NLP Foundations</h3>
+                <p>Master the roots of computational linguistics. Word embeddings, RNNs, and the evolution of modern NLP.</p>
                 <div class="card-action">
-                    START LEARNING
+                    EXPLORE NLP
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </div>
             </a>
         </div>
 
-        <!-- Track: Agentic Systems -->
+        <!-- Track: Agency & Developer Tools -->
         <div class="track-title">Agency & Developer Tools</div>
         <div class="grid-excellence">
-            <a href="course_agents.html" class="premium-card">
-                <div class="card-badge">PREMIUM</div>
+            <a href="course_agents.html" class="premium-card card-large">
+                <div class="card-badge">THE AGENTIC PARADIGM</div>
                 <div class="card-icon">🤖</div>
-                <h3>AI Agents & MCP</h3>
-                <p>Transition from chatbots to agents. Master Model Context Protocol and autonomous multi-agent orchestration.</p>
+                <h3>AI Agents & MCP Specialist</h3>
+                <p>Master the Model Context Protocol (MCP) and autonomous agent architectures. Build systems that think, plan, and execute across the global web.</p>
                 <div class="card-action">
-                    EXPLORE AGENCY
+                    BUILD AGENTS
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </div>
             </a>
 
-            <a href="course_claude.html" class="premium-card">
-                <div class="card-badge">NEW</div>
-                <div class="card-icon">💻</div>
-                <h3>Claude Code & Specialist</h3>
-                <p>Leveraging Anthropic's developer ecosystem to build production-grade artifacts and high-fidelity apps.</p>
+            <a href="course_claude.html" class="premium-card card-medium">
+                <div class="card-badge">FRONTIER MODEL</div>
+                <div class="card-icon">🎭</div>
+                <h3>Claude Specialist</h3>
+                <p>Master Anthropic's flagship models. Advanced prompt engineering, context window optimization, and Artifacts mastery.</p>
                 <div class="card-action">
-                    MASTER CLAUDE
+                    STUDY CLAUDE
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </div>
             </a>
