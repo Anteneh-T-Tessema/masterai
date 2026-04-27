@@ -110,11 +110,24 @@ const App = {
         window.selectAnswer = (qIdx, oIdx) => this.selectAnswer(qIdx, oIdx);
         window.submitQuiz = () => this.submitQuiz();
         window.resetQuiz = () => this.resetQuiz();
-        window.closeModal = () => this.els.modal.style.display = 'none';
+        window.checkoutCertification = () => this.checkoutCertification();
         window.showCertificate = () => this.showCertificate();
         window.closeCert = () => this.els.certModal.style.display = 'none';
         window.runSimulatedPrompt = () => this.runSimulatedPrompt();
         window.exportStudyMaterials = () => this.exportStudyMaterials();
+    },
+
+    checkoutCertification() {
+        alert(`Initializing Secure Checkout for ${this.state.title} Certification...\n\nTotal: $49.00 USD`);
+        // In production: window.location.href = `https://checkout.stripe.com/...`;
+    },
+
+    generateCertificate() {
+        alert("Generating Verified PDF Certificate... \n\nThis will include your name, specialization ID, and completion timestamp.");
+    },
+
+    closeModal() {
+        this.els.modal.style.display = 'none';
     },
 
     updateStreak() {
@@ -165,15 +178,19 @@ const App = {
                 </div>
                 
                 <div class="dashboard-grid">
-                    <div class="stat-card">
-                        <h4>Program Mastery</h4>
-                        <div class="value">${progress}%</div>
-                    </div>
-                    <div class="stat-card">
-                        <h4>Average Performance</h4>
-                        <div class="value" style="color: ${avgGrade >= 80 ? 'var(--success-color)' : 'var(--accent-color)'}">${avgGrade}%</div>
-                    </div>
-                    <div class="stat-card" onclick="loadGlossary()" style="cursor:pointer">
+                <div class="stat-card">
+                    <div class="label">Course Mastery</div>
+                    <div class="value">${this.state.completedUnits.length}/${this.getTotalUnits()}</div>
+                    <div class="sub">Modules Completed</div>
+                </div>
+                <div class="stat-card" style="border: 1px solid var(--accent-color); background: rgba(99, 102, 241, 0.05)">
+                    <div class="label" style="color: var(--accent-color)">Career Certification</div>
+                    <div class="value">Verified</div>
+                    <div class="sub">Professional Credential</div>
+                    <button class="nav-btn" style="background: var(--accent-color); color: white; margin-top: 1rem; width: 100%" onclick="App.checkoutCertification()">Get Certified ($49)</button>
+                </div>
+            </div>
+        <div class="stat-card" onclick="loadGlossary()" style="cursor:pointer">
                         <h4>Research Tools</h4>
                         <div class="value" style="font-size: 1.5rem">Reference & A-Z →</div>
                     </div>

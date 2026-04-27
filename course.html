@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Academy | Professional Specialization</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=Fira+Code&display=swap" rel="stylesheet">
+</head>
+<body class="dark-mode">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <h1>Academy</h1>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav" id="sidebar-nav">
+                <!-- Dynamic Navigation -->
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Course Mastery</span>
+                        <span id="mastery-percent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle">
+                    <span class="theme-icon">🌙</span>
+                    <span id="theme-text">Dark Mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="breadcrumb" id="breadcrumb">Specialization Dashboard</div>
+                <div class="user-actions">
+                    <button class="nav-btn" onclick="App.loadDashboard()">Dashboard</button>
+                    <button class="nav-btn" onclick="App.loadPlayground()">Labs</button>
+                </div>
+            </header>
+
+            <div id="content-area" class="content-area">
+                <!-- Dynamic Content Injection -->
+                <div id="loading-state" style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                    <div class="pulse-loader">Preparing Environment...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="certificate-modal" class="modal">
+        <div class="modal-content animate-slide-up">
+            <div class="modal-icon">🏆</div>
+            <h2>Specialization Mastered!</h2>
+            <p>You have successfully completed all modules with distinction.</p>
+            <div class="modal-actions">
+                <button class="nav-btn primary" onclick="App.generateCertificate()">Verified Certificate</button>
+                <button class="nav-btn" onclick="App.closeModal()">Dismiss</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Engine -->
+    <script src="data/registry.js"></script>
+    <script src="data/glossary.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+        // Dynamic Bootloader
+        async function bootAcademy() {
+            const params = new URLSearchParams(window.location.search);
+            const courseId = params.get('id') || 'llm';
+            const course = window.ACADEMY_REGISTRY[courseId];
+
+            if (!course) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Inject Identity
+            window.COURSE_ID = courseId;
+            window.COURSE_TITLE = course.title;
+
+            // Load Data Script
+            const script = document.createElement('script');
+            script.src = course.file;
+            script.onload = () => {
+                window.CHAPTERS_DATA.sort((a, b) => a.id - b.id);
+                App.init();
+            };
+            document.head.appendChild(script);
+        }
+
+        window.addEventListener('DOMContentLoaded', bootAcademy);
+    </script>
+</body>
+</html>
