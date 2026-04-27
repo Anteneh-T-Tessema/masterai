@@ -130,5 +130,24 @@
 
         window.addEventListener('DOMContentLoaded', bootAcademy);
     </script>
+    <!-- Mobile Navigation Hub -->
+    <nav class="mobile-nav-hub">
+        <a href="index.html" class="mobile-nav-item">
+            <span class="mobile-nav-icon">📊</span>
+            <span>Dashboard</span>
+        </a>
+        <a href="#" class="mobile-nav-item active" onclick="App.loadDashboard()">
+            <span class="mobile-nav-icon">🎓</span>
+            <span>Course</span>
+        </a>
+        <a href="#" class="mobile-nav-item" onclick="App.loadPlayground()">
+            <span class="mobile-nav-icon">🔬</span>
+            <span>Labs</span>
+        </a>
+        <a href="#" class="mobile-nav-item" onclick="document.querySelector('.sidebar')?.classList.toggle('open')">
+            <span class="mobile-nav-icon">📚</span>
+            <span>Menu</span>
+        </a>
+    </nav>
 </body>
 </html>

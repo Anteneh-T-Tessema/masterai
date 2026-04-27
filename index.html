@@ -1480,5 +1480,24 @@
 
         window.addEventListener('DOMContentLoaded', updateGlobalDashboard);
     </script>
+    <!-- Mobile Navigation Hub -->
+    <nav class="mobile-nav-hub">
+        <a href="#" class="mobile-nav-item active" onclick="switchView('personal')">
+            <span class="mobile-nav-icon">📊</span>
+            <span>Home</span>
+        </a>
+        <a href="#" class="mobile-nav-item" onclick="switchView('enterprise')">
+            <span class="mobile-nav-icon">🏢</span>
+            <span>B2B</span>
+        </a>
+        <a href="directory.html" class="mobile-nav-item">
+            <span class="mobile-nav-icon">🔍</span>
+            <span>Talent</span>
+        </a>
+        <a href="#" class="mobile-nav-item" onclick="document.querySelector('.sidebar')?.classList.toggle('open')">
+            <span class="mobile-nav-icon">📚</span>
+            <span>Menu</span>
+        </a>
+    </nav>
 </body>
 </html>
