@@ -32,6 +32,7 @@ const App = {
         notes: {},
         unitScores: {}, 
         selectedAnswers: {}, 
+        xp: parseInt(localStorage.getItem('academy_xp')) || 0,
         searchQuery: '',
         theme: 'light',
         streak: parseInt(localStorage.getItem('global_streak')) || 0,
@@ -45,6 +46,7 @@ const App = {
         this.state.bookmarks = JSON.parse(localStorage.getItem(`${this.state.id}_bookmarks`)) || [];
         this.state.notes = JSON.parse(localStorage.getItem(`${this.state.id}_notes`)) || {};
         this.state.unitScores = JSON.parse(localStorage.getItem(`${this.state.id}_scores`)) || {};
+        this.state.xp = parseInt(localStorage.getItem('academy_xp')) || 0;
         this.state.theme = localStorage.getItem(`${this.state.id}_theme`) || 'dark';
 
         this.cacheDOM();
@@ -200,6 +202,11 @@ const App = {
                 
                 
                 <div class="dashboard-grid">
+                <div class="stat-card" style="border-bottom: 4px solid var(--accent-color)">
+                    <div class="label">Industrial XP</div>
+                    <div class="value" id="xp-display">${this.state.xp}</div>
+                    <div class="sub">Level ${Math.floor(this.state.xp / 1000) + 1} Specialist</div>
+                </div>
                 <div class="stat-card">
                     <div class="label">Course Mastery</div>
                     <div class="value">${this.state.completedUnits.length}/${this.getTotalUnits()}</div>
@@ -630,20 +637,34 @@ const App = {
         const id = `${c}-${u}`;
         if (!this.state.completedUnits.includes(id)) {
             this.state.completedUnits.push(id);
+            this.state.xp += 250; // Award Industrial XP
+            localStorage.setItem('academy_xp', this.state.xp);
             localStorage.setItem(`${this.state.id}_completed`, JSON.stringify(this.state.completedUnits));
+            
             this.renderSidebar();
             this.updateProgressUI();
+            this.showNotification(`+250 XP: Module Mastered!`);
             
             // Trigger Certificate ONLY if Final Exam (Module 11) is passed
             if (c === this.state.chapters.length - 1) { 
                 const score = this.state.unitScores[id];
                 if (score >= 80) {
+                    this.state.xp += 1000; // Bonus XP for full certification
+                    localStorage.setItem('academy_xp', this.state.xp);
                     this.els.modal.querySelector('h2').textContent = `${this.state.title} Mastered!`;
-                    this.els.modal.querySelector('p').textContent = `You have successfully completed all ${this.getTotalUnits()} modules with distinction.`;
+                    this.els.modal.querySelector('p').textContent = `You have successfully completed all ${this.getTotalUnits()} modules with distinction. +1000 XP Awarded.`;
                     this.els.modal.style.display = 'flex';
                 }
             }
         }
+    },
+
+    showNotification(msg) {
+        const toast = document.createElement('div');
+        toast.style = "position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--accent-color); color: white; padding: 1rem 2rem; border-radius: 50px; font-weight: 800; font-size: 0.8rem; z-index: 9999; box-shadow: 0 10px 30px rgba(88,166,255,0.4); animation: slideUp 0.3s ease-out;";
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
     },
 
     toggleChapter(i) { this.state.currentChapter = this.state.currentChapter === i ? -1 : i; this.renderSidebar(); },

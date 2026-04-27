@@ -382,14 +382,62 @@
         .stat-item .val { font-size: 2rem; font-weight: 900; font-family: 'Outfit', sans-serif; display: block; }
         .stat-item .lbl { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
 
-        @media (max-width: 900px) {
-            .hero h1 { font-size: 3rem; }
-            .grid-excellence { grid-template-columns: 1fr; }
-            .premium-card { padding: 2rem; }
+        /* --- Institutional Boot Sequence --- */
+        #boot-overlay {
+            position: fixed;
+            inset: 0;
+            background: #05070a;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-color);
+            transition: opacity 0.5s ease-out;
+        }
+        .boot-log {
+            width: 400px;
+            font-size: 0.7rem;
+            line-height: 1.8;
+            height: 200px;
+            overflow: hidden;
+            opacity: 0.8;
+        }
+        .boot-progress {
+            width: 300px;
+            height: 2px;
+            background: rgba(255,255,255,0.05);
+            margin-top: 2rem;
+            position: relative;
+        }
+        .boot-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: var(--accent-color);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        .boot-status {
+            margin-top: 1rem;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
         }
     </style>
 </head>
 <body>
+    <!-- Institutional Boot Overlay -->
+    <div id="boot-overlay">
+        <div style="font-size: 2rem; font-weight: 900; margin-bottom: 2rem; font-family: 'Outfit';">A</div>
+        <div class="boot-log" id="boot-log"></div>
+        <div class="boot-progress">
+            <div class="boot-bar" id="boot-bar"></div>
+        </div>
+        <div class="boot-status" id="boot-status">Initializing Environment...</div>
+    </div>
     <div class="bg-glow"></div>
 
     <nav class="main-nav">
@@ -1478,7 +1526,51 @@
             loadLab('finance');
         }
 
-        window.addEventListener('DOMContentLoaded', updateGlobalDashboard);
+        function runBootSequence() {
+            if (sessionStorage.getItem('academy_booted')) {
+                document.getElementById('boot-overlay').style.display = 'none';
+                updateGlobalDashboard();
+                return;
+            }
+
+            const log = document.getElementById('boot-log');
+            const bar = document.getElementById('boot-bar');
+            const status = document.getElementById('boot-status');
+            const lines = [
+                "> Initializing Academy Core v2.4.0...",
+                "> Connecting to Decentralized Registry...",
+                "> Loading 50 Industrial Mastery Tracks...",
+                "> Verifying Institutional Compliance...",
+                "> Synchronizing R&D Laboratory Environment...",
+                "> Loading Expert Contributor Marketplace...",
+                "> Initializing AI Mentorship Persona Engine...",
+                "> SYSTEM READY. ACCESSED GRANTED."
+            ];
+
+            let lineIdx = 0;
+            const interval = setInterval(() => {
+                if (lineIdx < lines.length) {
+                    const div = document.createElement('div');
+                    div.textContent = lines[lineIdx];
+                    log.appendChild(div);
+                    lineIdx++;
+                    bar.style.width = `${(lineIdx / lines.length) * 100}%`;
+                    status.textContent = lines[lineIdx-1].replace('> ', '');
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById('boot-overlay').style.opacity = '0';
+                        setTimeout(() => {
+                            document.getElementById('boot-overlay').style.display = 'none';
+                            sessionStorage.setItem('academy_booted', 'true');
+                            updateGlobalDashboard();
+                        }, 500);
+                    }, 800);
+                }
+            }, 300);
+        }
+
+        window.addEventListener('DOMContentLoaded', runBootSequence);
     </script>
     <!-- Mobile Navigation Hub -->
     <nav class="mobile-nav-hub">
