@@ -3,6 +3,21 @@
  */
 
 const App = {
+    // Inject Identity & SEO
+    initIdentity(courseId, course) {
+        window.COURSE_ID = courseId;
+        window.COURSE_TITLE = course.title;
+        
+        document.title = `${course.title} | Global AI Academy`;
+        document.getElementById('dynamic-desc').content = `Master ${course.title} with the Global AI Academy. Earn a verified professional certificate in ${courseId.toUpperCase()}.`;
+        
+        // Update Schema
+        const schema = JSON.parse(document.getElementById('course-schema').innerHTML);
+        schema.name = course.title;
+        schema.description = `Professional specialization and certification in ${course.title}.`;
+        document.getElementById('course-schema').innerHTML = JSON.stringify(schema);
+    },
+
     state: {
         id: window.COURSE_ID || 'llm_basics',
         title: window.COURSE_TITLE || 'AI Specialization',
@@ -115,6 +130,12 @@ const App = {
         window.closeCert = () => this.els.certModal.style.display = 'none';
         window.runSimulatedPrompt = () => this.runSimulatedPrompt();
         window.exportStudyMaterials = () => this.exportStudyMaterials();
+    },
+
+    shareToLinkedIn() {
+        const text = `I am proud to announce that I have completed the ${this.state.title} at the Global AI Academy! 🚀\n\nI've mastered the frontiers of ${window.COURSE_ID.toUpperCase()} and earned my verified professional certificate. Looking forward to applying these specialized AI skills in the industry.\n\n#AI #Specialization #GlobalAIAcademy #CareerFrontier`;
+        const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
+        window.open(url, '_blank');
     },
 
     checkoutCertification() {

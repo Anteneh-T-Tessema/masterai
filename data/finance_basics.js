@@ -32,29 +32,31 @@ window.CHAPTERS_DATA.push({
 
 window.CHAPTERS_DATA.push({
     "id": 3,
-    "title": "Module 3: RegTech & Compliance",
-    "description": "Automating regulatory monitoring with AI.",
+    "title": "Module 3: High-Frequency Trading & Neural Arbitrage",
+    "description": "Exploiting market micro-inefficiencies with deep learning.",
     "units": [
       {
         "id": "3.1",
-        "title": "Lecture: Automated KYC/AML",
-        "content": "<h2>Scaleable Compliance</h2><p>Explore how AI automates 'Know Your Customer' and Anti-Money Laundering protocols while ensuring strict regulatory adherence.</p>",
-        "questions": []
+        "title": "Lecture: Reinforcement Learning in HFT",
+        "content": "<div class='pedagogy-header'><h4>Technical Depth</h4><ul><li>Analyze order-book imbalance with CNNs</li><li>Understand latency-sensitive inference</li><li>Explore multi-agent competitive RL</li></ul></div><h2>The Speed of Light</h2><p>In this module, we dive into the technical architecture of neural arbitrage systems that execute thousands of trades per second, predicting price movements by analyzing the limit order book (LOB) in real-time.</p>",
+        "questions": [
+          { "question": "What is 'Neural Arbitrage'?", "options": ["Trading based on news", "Using deep learning to exploit tiny price differences between different exchanges in milliseconds", "A type of bank account", "Saving money"], "correctIndex": 1, "explanation": "Neural arbitrage uses high-speed AI models to identify and execute profitable trades faster than humanly possible." }
+        ]
       }
     ]
 });
 
 window.CHAPTERS_DATA.push({
     "id": 4,
-    "title": "Module 4: Finance Specialist Capstone",
+    "title": "Finance & Fintech Specialist Capstone",
     "description": "Final assessment for the AI Finance certification.",
     "units": [
       {
         "id": "4.1",
-        "title": "Capstone: Intelligent Risk Modeling",
-        "content": "<h2>Final Validation</h2><p>Prove your ability to design secure, intelligent, and compliant financial AI systems.</p>",
+        "title": "Capstone: Algorithmic Alpha Design",
+        "content": "<h2>Final Validation</h2><p>Prove your ability to architect a high-scale, AI-driven financial intelligence engine.</p>",
         "questions": [
-          { "question": "What is 'Alpha' in the context of AI trading?", "options": ["The first model version", "Excess return relative to a benchmark", "The Greek alphabet", "A type of risk"], "correctIndex": 1, "explanation": "Alpha refers to the ability of a strategy to beat the market return." }
+          { "question": "What is 'Alpha' in AI trading?", "options": ["The first version", "The excess return of a strategy relative to the market benchmark", "A programming language", "A type of crypto"], "correctIndex": 1, "explanation": "In finance, 'Alpha' is the holy grail—it represents the value added by your AI strategy over a simple buy-and-hold approach." }
         ]
       }
     ]
