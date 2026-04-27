@@ -419,6 +419,7 @@
     <div class="view-toggle animate-slide-up">
         <button class="toggle-btn active" id="view-personal" onclick="switchView('personal')">Individual Dashboard</button>
         <button class="toggle-btn" id="view-enterprise" onclick="switchView('enterprise')">Enterprise Portal</button>
+        <button class="toggle-btn" id="view-creator" onclick="switchView('creator')">Creator Marketplace</button>
     </div>
 
     <!-- Individual Dashboard -->
@@ -478,6 +479,27 @@
                 </div>
             </div>
         </div>
+
+    <!-- Creator Marketplace Dashboard -->
+    <div id="creator-dashboard" class="catalog-content" style="display: none;">
+        <div class="enterprise-stats animate-slide-up">
+            <div class="stat-card"><span class="label">Total Earnings</span><h3 id="creator-earnings">$0.00</h3></div>
+            <div class="stat-card"><span class="label">Course Reach</span><h3 id="creator-reach">0 Views</h3></div>
+            <div class="stat-card"><span class="label">Revenue Share</span><h3>25%</h3></div>
+        </div>
+
+        <div class="enterprise-table-container animate-slide-up">
+            <div class="table-header"><span>Video Material</span><span>Specialization</span><span>Performance</span><span>Earnings</span><span>Status</span></div>
+            <div id="contributor-content-list"></div>
+        </div>
+
+        <div class="enterprise-licensing animate-slide-up">
+            <div class="licensing-header"><h3>Monetize Your Expertise</h3><p>Upload specialized video training and earn 25% of all attributed revenue.</p></div>
+            <div style="margin-top: 2rem">
+                <button class="nav-btn primary" onclick="alert('Redirecting to Creator Onboarding...')">Launch Creator Portal</button>
+            </div>
+        </div>
+    </div>
     </div>
 
 
@@ -1207,22 +1229,38 @@
             }
         }
 
-    <script src="data/registry.js"></script>
-    <script src="data/news.js"></script>
-    <script src="data/leaderboard.js"></script>
-    <script src="data/jobs.js"></script>
-    <script src="data/badges.js"></script>
-    <script src="data/enterprise.js"></script>
-    <script src="data/labs.js"></script>
+    <script src="data/contributors.js"></script>
     <script>
         let currentLabId = 'finance';
 
         function switchView(view) {
             document.getElementById('personal-dashboard').style.display = view === 'personal' ? 'block' : 'none';
             document.getElementById('enterprise-dashboard').style.display = view === 'enterprise' ? 'block' : 'none';
+            document.getElementById('creator-dashboard').style.display = view === 'creator' ? 'block' : 'none';
+            
             document.getElementById('view-personal').classList.toggle('active', view === 'personal');
             document.getElementById('view-enterprise').classList.toggle('active', view === 'enterprise');
+            document.getElementById('view-creator').classList.toggle('active', view === 'creator');
+            
             if (view === 'enterprise') renderEnterprise();
+            if (view === 'creator') renderCreator();
+        }
+
+        function renderCreator() {
+            const data = window.ACADEMY_CONTRIBUTORS[0]; // Simulating logged in as first contributor
+            document.getElementById('creator-earnings').textContent = `$${data.total_revenue.toLocaleString()}.00`;
+            document.getElementById('creator-reach').textContent = `${data.videos[0].views.toLocaleString()} Views`;
+            
+            const list = document.getElementById('contributor-content-list');
+            list.innerHTML = data.videos.map(v => `
+                <div class="employee-row">
+                    <div class="name">${v.title}</div>
+                    <div class="role">${data.specialization}</div>
+                    <div class="progress-pill">${v.views} Views</div>
+                    <div class="certs">$${(v.views * 0.25).toLocaleString()}</div>
+                    <div><span style="color: var(--success-color); font-weight: 800;">ACTIVE</span></div>
+                </div>
+            `).join('');
         }
 
         function calculateEnterprisePrice() {
