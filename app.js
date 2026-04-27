@@ -198,6 +198,7 @@ const App = {
                     ${isCertified ? '<div class="badge certified">CERTIFIED MASTER</div>' : ''}
                 </div>
                 
+                
                 <div class="dashboard-grid">
                 <div class="stat-card">
                     <div class="label">Course Mastery</div>
@@ -501,7 +502,7 @@ const App = {
         ` : '';
         
         this.els.content.innerHTML = `
-            ${videoHtml}
+            ${this.renderVideoEngine(unit)}
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem">
                 <h1 style="font-size: 2rem; font-weight: 700">${unit.title}</h1>
                 <button onclick="toggleBookmark(${cIdx}, ${uIdx})" class="nav-btn" style="padding: 0.5rem 1rem; font-size: 0.75rem; border-color: ${isBookmarked ? 'var(--accent-color)' : 'var(--glass-border)'}">
@@ -650,7 +651,43 @@ const App = {
     getTotalUnits() { return this.state.chapters.reduce((acc, c) => acc + c.units.length, 0); },
     saveState() { localStorage.setItem(`${this.state.id}_current`, JSON.stringify({ view: this.state.currentView, chapter: this.state.currentChapter, unit: this.state.currentUnit })); },
     toggleTheme() { this.state.theme = document.documentElement.classList.toggle('dark-mode') ? 'dark' : 'light'; localStorage.setItem(`${this.state.id}_theme`, this.state.theme); },
-    applyTheme() { if (this.state.theme === 'dark') document.documentElement.classList.add('dark-mode'); }
+    applyTheme() { if (this.state.theme === 'dark') document.documentElement.classList.add('dark-mode'); },
+
+    renderVideoEngine(unit) {
+        const videoKey = `${this.state.id}_${unit.id.split('.')[0]}`;
+        const video = (window.ACADEMY_VIDEOS || {})[videoKey] || (window.ACADEMY_VIDEOS || {})['finance_hft']; 
+        if (!video) return '';
+        const contributor = (window.ACADEMY_CONTRIBUTORS || []).find(c => c.id === video.creator_id) || {name: 'Academy Expert', avatar: '🎓'};
+
+        return `
+            <div class="video-streaming-engine animate-slide-up" style="margin-bottom: 4rem;">
+                <div class="video-player-frame" style="position: relative; background: #000; border-radius: 32px; overflow: hidden; border: 1px solid var(--glass-border); box-shadow: 0 40px 80px rgba(0,0,0,0.6);">
+                    <div style="position: absolute; top: 30px; left: 30px; z-index: 10; background: rgba(0,0,0,0.7); padding: 8px 15px; border-radius: 8px; border: 1px solid var(--accent-color);">
+                        <span style="color: var(--accent-color); font-weight: 900; font-size: 0.7rem; letter-spacing: 0.1em;">CINEMA MODE ACTIVE</span>
+                    </div>
+                    <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                            src="https://www.youtube.com/embed/${video.youtube_id}?modestbranding=1&rel=0&showinfo=0&controls=1" 
+                            frameborder="0" allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="player-footer" style="padding: 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); backdrop-filter: blur(10px);">
+                        <div style="display: flex; align-items: center; gap: 1.5rem;">
+                            <div style="font-size: 2rem;">${contributor.avatar}</div>
+                            <div>
+                                <div style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase;">Institutional Contributor</div>
+                                <div style="font-weight: 700; font-size: 1.1rem;">${contributor.name}</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right">
+                            <div style="font-size: 0.7rem; color: var(--text-dim);">${video.resolution}</div>
+                            <div style="color: var(--accent-color); font-weight: 800;">${video.duration} Full Duration</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 };
 
 App.init();
