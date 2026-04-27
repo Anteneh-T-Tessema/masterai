@@ -1,9 +1,42 @@
 window.ACADEMY_LEADERBOARD = [
-    { "rank": 1, "name": "Dr. Aris Thorne", "points": 14200, "tracks": 35, "avatar": "🧙‍♂️" },
-    { "rank": 2, "name": "Elena Vance", "points": 12850, "tracks": 30, "avatar": "👩‍💻" },
-    { "rank": 3, "name": "Kenji Sato", "points": 11400, "tracks": 28, "avatar": "🤖" },
-    { "rank": 4, "name": "Sarah Miller", "points": 9600, "tracks": 22, "avatar": "🧬" },
-    { "rank": 5, "name": "Marcus Aurelius", "points": 8900, "tracks": 20, "avatar": "🏛️" },
-    { "rank": 6, "name": "Sofia Chen", "points": 7500, "tracks": 18, "avatar": "🎨" },
-    { "rank": 7, "name": "Alex River", "points": 6200, "tracks": 15, "avatar": "🌊" }
+    {
+        "rank": 1,
+        "name": "Arjun S.",
+        "location": "Singapore",
+        "specialization": "Finance",
+        "xp": 24500,
+        "badge": "Frontier Elite"
+    },
+    {
+        "rank": 2,
+        "name": "Elena M.",
+        "location": "Berlin",
+        "specialization": "Quantum",
+        "xp": 22100,
+        "badge": "Frontier Elite"
+    },
+    {
+        "rank": 3,
+        "name": "Marcus V.",
+        "location": "London",
+        "specialization": "Defense",
+        "xp": 21850,
+        "badge": "Frontier Elite"
+    },
+    {
+        "rank": 4,
+        "name": "Yuki K.",
+        "location": "Tokyo",
+        "specialization": "Healthcare",
+        "xp": 19400,
+        "badge": "Master"
+    },
+    {
+        "rank": 5,
+        "name": "Sarah J.",
+        "location": "New York",
+        "specialization": "Governance",
+        "xp": 18200,
+        "badge": "Master"
+    }
 ];

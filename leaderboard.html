@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Mastery Leaderboard | Frontier Elite Rankings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --midnight: #05070a;
+            --accent-color: #58a6ff;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-dim: #8b949e;
+        }
+        body {
+            background: var(--midnight);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 4rem 2rem; }
+        
+        header { text-align: center; margin-bottom: 6rem; }
+        h1 { font-size: 4rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 1rem; }
+        .subtitle { color: var(--text-dim); font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
+
+        /* Leaderboard Table */
+        .leaderboard-table {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+        .table-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 1fr 120px 150px;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            transition: background 0.3s;
+        }
+        .table-row:hover { background: rgba(255,255,255,0.02); }
+        .table-header {
+            background: rgba(255,255,255,0.02);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            font-weight: 800;
+        }
+        
+        .rank { font-family: 'Fira Code', monospace; font-size: 1.2rem; font-weight: 700; color: var(--accent-color); }
+        .name { font-weight: 700; font-size: 1.1rem; }
+        .location { color: var(--text-dim); font-size: 0.9rem; }
+        .xp { font-weight: 900; color: white; }
+        .badge-tag {
+            font-size: 0.6rem;
+            padding: 4px 10px;
+            border-radius: 50px;
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            text-transform: uppercase;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .nav-btn {
+            position: absolute; top: 2rem; left: 2rem;
+            color: var(--text-dim); text-decoration: none; font-weight: 700; font-size: 0.9rem;
+        }
+        .nav-btn:hover { color: white; }
+
+        /* User Rank Overlay */
+        .user-rank-box {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.1), transparent);
+            border: 1px solid var(--accent-color);
+            padding: 2rem;
+            border-radius: 24px;
+            margin-bottom: 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-btn">← BACK TO DASHBOARD</a>
+        
+        <header>
+            <div style="font-size: 0.7rem; color: var(--accent-color); font-weight: 900; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 1rem;">The Frontier Elite</div>
+            <h1>Global Mastery</h1>
+            <div class="subtitle">The world's top AI talent, ranked by Industrial XP and specialization depth.</div>
+        </header>
+
+        <div class="user-rank-box">
+            <div>
+                <div style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.5rem;">Your Current Standing</div>
+                <div style="font-size: 2rem; font-weight: 900;">Global Rank: #<span id="user-rank">---</span></div>
+            </div>
+            <div style="text-align: right">
+                <div style="font-size: 2rem; font-weight: 900; color: var(--accent-color);" id="user-xp">0 XP</div>
+                <div style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase;">Total Industrial XP</div>
+            </div>
+        </div>
+
+        <div class="leaderboard-table">
+            <div class="table-row table-header">
+                <div>Rank</div>
+                <div>Specialist</div>
+                <div>Specialization</div>
+                <div>Industrial XP</div>
+                <div>Credential</div>
+            </div>
+            <div id="leaderboard-grid">
+                <!-- Injected Here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="data/leaderboard.js"></script>
+    <script>
+        function renderLeaderboard() {
+            const grid = document.getElementById('leaderboard-grid');
+            const data = window.ACADEMY_LEADERBOARD;
+            
+            // Get local user data
+            const userXp = parseInt(localStorage.getItem('academy_xp')) || 0;
+            document.getElementById('user-xp').textContent = `${userXp} XP`;
+            
+            // Simulated user rank calculation
+            const userRank = userXp > 20000 ? 5 : (userXp > 10000 ? 120 : 1500);
+            document.getElementById('user-rank').textContent = userRank;
+
+            grid.innerHTML = data.map(row => `
+                <div class="table-row">
+                    <div class="rank">#${row.rank}</div>
+                    <div>
+                        <div class="name">${row.name}</div>
+                        <div class="location">${row.location}</div>
+                    </div>
+                    <div style="font-weight: 600;">${row.specialization}</div>
+                    <div class="xp">${row.xp.toLocaleString()}</div>
+                    <div><span class="badge-tag">${row.badge}</span></div>
+                </div>
+            `).join('');
+        }
+
+        window.addEventListener('DOMContentLoaded', renderLeaderboard);
+    </script>
+</body>
+</html>
