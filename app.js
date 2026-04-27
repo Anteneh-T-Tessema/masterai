@@ -510,6 +510,32 @@ const App = {
                 </button>
             </div>
             <div class="lecture-body">${unit.content}</div>
+
+            <!-- Floating AI Mentor Anchor -->
+            <div id="mentor-anchor" style="position: fixed; bottom: 30px; right: 30px; z-index: 1000;">
+                <button onclick="App.toggleMentorChat()" class="nav-btn primary" style="width: 60px; height: 60px; border-radius: 50%; box-shadow: 0 10px 30px rgba(88, 166, 255, 0.4); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🤖</button>
+            </div>
+
+            <!-- Mentor Chat Window (Hidden by Default) -->
+            <div id="mentor-chat-window" style="display: none; position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px; background: #0d1117; border: 1px solid var(--glass-border); border-radius: 20px; z-index: 1001; flex-direction: column; box-shadow: 0 30px 60px rgba(0,0,0,0.5); overflow: hidden;">
+                <div style="padding: 1.5rem; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <span id="mentor-avatar" style="font-size: 1.2rem;">👨‍🏫</span>
+                        <div>
+                            <div id="mentor-name" style="font-weight: 800; font-size: 0.9rem;">AI Mentor</div>
+                            <div style="font-size: 0.6rem; color: var(--accent-color); text-transform: uppercase;">Frontier Intelligence</div>
+                        </div>
+                    </div>
+                    <button onclick="App.toggleMentorChat()" style="background: none; border: none; color: white; cursor: pointer;">✕</button>
+                </div>
+                <div id="mentor-messages" style="flex: 1; padding: 1.5rem; overflow-y: auto; font-size: 0.85rem; line-height: 1.5;">
+                    <!-- Messages Injected Here -->
+                </div>
+                <div style="padding: 1.5rem; border-top: 1px solid var(--glass-border); display: flex; gap: 0.5rem;">
+                    <input type="text" id="mentor-input" placeholder="Ask your mentor..." style="flex: 1; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; padding: 0.8rem; color: white; outline: none;" onkeydown="if(event.key === 'Enter') App.sendMentorMessage()">
+                    <button onclick="App.sendMentorMessage()" class="nav-btn primary" style="padding: 0.8rem;">Send</button>
+                </div>
+            </div>
             
             ${unit.questions && unit.questions.length > 0 ? `
                 <div class="quiz-container" id="quiz-container" style="margin-top: 5rem; padding: 4rem 0; border-top: 1px solid var(--glass-border)">
@@ -652,6 +678,40 @@ const App = {
     saveState() { localStorage.setItem(`${this.state.id}_current`, JSON.stringify({ view: this.state.currentView, chapter: this.state.currentChapter, unit: this.state.currentUnit })); },
     toggleTheme() { this.state.theme = document.documentElement.classList.toggle('dark-mode') ? 'dark' : 'light'; localStorage.setItem(`${this.state.id}_theme`, this.state.theme); },
     applyTheme() { if (this.state.theme === 'dark') document.documentElement.classList.add('dark-mode'); },
+
+    toggleMentorChat() {
+        const win = document.getElementById('mentor-chat-window');
+        const isHidden = win.style.display === 'none';
+        win.style.display = isHidden ? 'flex' : 'none';
+        
+        if (isHidden && document.getElementById('mentor-messages').children.length === 0) {
+            const mentor = window.ACADEMY_MENTORS[this.state.id] || window.ACADEMY_MENTORS['finance'];
+            document.getElementById('mentor-name').textContent = mentor.name;
+            document.getElementById('mentor-messages').innerHTML = `<div class="message system" style="background: rgba(88, 166, 255, 0.05); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 2px solid var(--accent-color); font-style: italic;">${mentor.welcome}</div>`;
+        }
+    },
+
+    sendMentorMessage() {
+        const input = document.getElementById('mentor-input');
+        const messages = document.getElementById('mentor-messages');
+        const query = input.value;
+        if (!query) return;
+
+        input.value = '';
+        messages.innerHTML += `<div class="message user" style="margin-bottom: 1.5rem; text-align: right;"><strong>You:</strong> ${query}</div>`;
+        messages.scrollTo(0, messages.scrollHeight);
+
+        const mentor = window.ACADEMY_MENTORS[this.state.id] || window.ACADEMY_MENTORS['finance'];
+        
+        // Simulated Reasoning Log
+        messages.innerHTML += `<div class="message system" style="color: var(--text-dim); font-size: 0.7rem; margin-bottom: 1rem; font-family: 'Fira Code', monospace;">[THINKING]: Analyzing query against ${mentor.knowledge_base[0]} data...</div>`;
+
+        setTimeout(() => {
+            const response = `Based on my analysis of your query and the ${this.state.title} curriculum, I recommend focusing on ${mentor.knowledge_base[Math.floor(Math.random() * mentor.knowledge_base.length)]}. This is a critical competency for your final assessment.`;
+            messages.innerHTML += `<div class="message assistant" style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;"><strong>${mentor.name}:</strong> ${response}</div>`;
+            messages.scrollTo(0, messages.scrollHeight);
+        }, 1200);
+    },
 
     renderVideoEngine(unit) {
         const videoKey = `${this.state.id}_${unit.id.split('.')[0]}`;
