@@ -166,31 +166,50 @@
             filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
         }
 
-        .premium-card h3 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, #fff, #a5b4fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* Leaderboard Styling */
+        .leaderboard-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-bottom: 4rem;
+            backdrop-filter: blur(10px);
         }
 
-        .premium-card p {
-            color: var(--text-dim);
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-            flex-grow: 1;
-        }
-
-        .card-action {
-            display: flex;
+        .leaderboard-header, .leaderboard-row, .user-rank-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 150px 100px;
+            padding: 1rem;
             align-items: center;
-            gap: 0.5rem;
+        }
+
+        .leaderboard-header {
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .leaderboard-row {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.3s;
+        }
+
+        .leaderboard-row:hover { background: rgba(255,255,255,0.02); }
+
+        .leaderboard-row .rank { font-weight: 800; color: var(--accent-color); font-size: 1.2rem; }
+        .leaderboard-row .name { font-weight: 600; display: flex; align-items: center; gap: 0.75rem; }
+        .leaderboard-row .points { font-family: 'Fira Code', monospace; color: var(--success-color); }
+        
+        .user-rank-row {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--accent-color);
+            border-radius: 12px;
+            margin-top: 1rem;
+            color: white;
             font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--accent-color);
-            margin-top: auto;
         }
         .card-action svg { transition: transform 0.3s ease; }
         .premium-card:hover .card-action svg { transform: translateX(8px); }
@@ -296,10 +315,21 @@
         </div>
     </header>
 
-    <!-- Frontier News Section -->
-    <div id="news-start" class="track-title" style="margin-top: 4rem">Daily Frontier Intelligence</div>
-    <div class="grid-excellence" id="news-grid">
-        <!-- Dynamic News Injection -->
+    <!-- Global Leaderboard Section -->
+    <div class="track-title" style="margin-top: 4rem">Top Minds of the Academy</div>
+    <div class="leaderboard-container animate-slide-up">
+        <div class="leaderboard-header">
+            <span>Rank</span>
+            <span>Specialist</span>
+            <span>Mastery Points</span>
+            <span>Tracks</span>
+        </div>
+        <div id="leaderboard-list">
+            <!-- Dynamic Leaderboard Injection -->
+        </div>
+        <div id="user-rank-box" class="user-rank-row" style="display: none;">
+            <!-- Current User Rank -->
+        </div>
     </div>
 
         <!-- Track: Specialized Research -->
@@ -891,22 +921,52 @@
             `).join('');
         }
 
+    <script src="data/leaderboard.js"></script>
+    <script>
+        function renderLeaderboard(userPoints, userTracks) {
+            const list = document.getElementById('leaderboard-list');
+            const userBox = document.getElementById('user-rank-box');
+            if (!list) return;
+
+            list.innerHTML = window.ACADEMY_LEADERBOARD.map(item => `
+                <div class="leaderboard-row">
+                    <div class="rank">#${item.rank}</div>
+                    <div class="name"><span>${item.avatar}</span> ${item.name}</div>
+                    <div class="points">${item.points.toLocaleString()}</div>
+                    <div class="tracks">${item.tracks}</div>
+                </div>
+            `).join('');
+
+            if (userPoints > 0) {
+                userBox.style.display = 'grid';
+                userBox.innerHTML = `
+                    <div class="rank">YOU</div>
+                    <div class="name">🚀 Frontier Specialist</div>
+                    <div class="points">${userPoints.toLocaleString()}</div>
+                    <div class="tracks">${userTracks}</div>
+                `;
+            }
+        }
+
         function updateGlobalDashboard() {
             const registry = window.ACADEMY_REGISTRY;
             const ids = Object.keys(registry);
             let totalUnits = 0;
             let completedUnits = 0;
             let certs = 0;
+            let activeTracks = 0;
 
             ids.forEach(id => {
                 const completed = JSON.parse(localStorage.getItem(`${id}_completed`)) || [];
-                totalUnits += 4; // Assume 4 units avg
+                totalUnits += 4;
                 completedUnits += completed.length;
+                if (completed.length > 0) activeTracks++;
                 if (completed.length >= 4) certs++;
             });
 
             const mastery = Math.round((completedUnits / totalUnits) * 100) || 0;
-            
+            const userPoints = completedUnits * 100;
+
             if(document.getElementById('academy-mastery')) document.getElementById('academy-mastery').textContent = `${mastery}%`;
             if(document.getElementById('certs-earned')) document.getElementById('certs-earned').textContent = certs;
             if(document.getElementById('total-tracks-count')) document.getElementById('total-tracks-count').textContent = ids.length;
@@ -915,6 +975,7 @@
             if(document.getElementById('global-streak')) document.getElementById('global-streak').textContent = streak;
             
             renderNews();
+            renderLeaderboard(userPoints, activeTracks);
         }
 
         window.addEventListener('DOMContentLoaded', updateGlobalDashboard);
